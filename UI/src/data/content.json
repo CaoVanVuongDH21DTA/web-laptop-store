@@ -1,0 +1,450 @@
+{
+  "pages": {
+    "shop": {
+      "sections": [
+        {
+          "title": "Linh kiện Laptop",
+          "data": [
+            {
+              "title": "Ram Laptop",
+              "description": "Explore Now!",
+              "image": "./images/Ram-Laptop.jpg"
+            },
+            {
+              "title": "Ổ cứng",
+              "description": "Explore Now!",
+              "image": "./images/hardware-laptop.jpg"
+            },
+            {
+              "title": "Wifi Card",
+              "description": "Explore Now!",
+              "image": "./images/wifi-card.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Phụ kiện Laptop",
+          "data": [
+            {
+              "title": "Chuột, Bàn phím, Tai nghe",
+              "description": "Explore Now!",
+              "image": "./images/cb-phim-chuot-tainghe.png"
+            },
+            {
+              "title": "Ba lô, Túi chống sốc",
+              "description": "Explore Now!",
+              "image": "./images/balo.webp"
+            },
+            {
+              "title": "Hub USB",
+              "description": "Explore Now!",
+              "image": "./images/hub.jpg"
+            },
+            {
+              "title": "Tản nhiệt",
+              "description": "Explore Now!",
+              "image": "./images/tan-nhiet.jpg"
+            },
+            {
+              "title": "Cáp chuyển đổi",
+              "description": "Explore Now!",
+              "image": "./images/cap-chuyen-doi.jpg"
+            },
+            {
+              "title": "Webcam rời",
+              "description": "Explore Now!",
+              "image": "./images/webcam.jpg"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "footer": {
+    "items": [
+      {
+        "title": "Need Help",
+        "list": [
+          {
+            "label": "Contact Us",
+            "path": "/contact-us"
+          },
+          {
+            "label": "Track Order",
+            "path": "/track-order"
+          },
+          {
+            "label": "Returns & Refunds",
+            "path": "/refunds"
+          },
+          {
+            "label": "FAQ's",
+            "path": "/faq"
+          },
+          {
+            "label": "Career",
+            "path": "/career"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "list": [
+          {
+            "label": "About Us",
+            "path": "/about"
+          },
+          {
+            "label": "Media",
+            "path": "/media"
+          }
+        ]
+      },
+      {
+        "title": "More Info",
+        "list": [
+          {
+            "label": "Term and Conditions",
+            "path": "/terms-conditions"
+          },
+          {
+            "label": "Privacy Policy",
+            "path": "/policies"
+          },
+          {
+            "label": "Shipping Policy",
+            "path": "/policies"
+          }
+        ]
+      },
+      {
+        "title": "Location",
+        "description": "Location Country"
+      }
+    ],
+    "copyright": "Copyright © 2025 LaptopStore"
+  },
+  "categories": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "code": "LAPTOP",
+      "path": "/laptop",
+      "description": "Các dòng laptop từ phổ thông đến cao cấp",
+      "types": [
+        {
+          "id": 1,
+          "name": "Laptop Văn Phòng",
+          "description": "Phù hợp cho học tập, làm việc nhẹ"
+        },
+        {
+          "id": 2,
+          "name": "Laptop Gaming",
+          "description": "Laptop cấu hình cao chuyên cho chơi game"
+        },
+        {
+          "id": 3,
+          "name": "Ultrabook",
+          "description": "Thiết kế mỏng nhẹ, sang trọng"
+        },
+        {
+          "id": 4,
+          "name": "Laptop Đồ Họa",
+          "description": "Laptop hiệu năng cao cho thiết kế, dựng phim"
+        }
+      ],
+      "meta_data": {
+        "brands": ["Dell", "HP", "Asus", "Acer", "Lenovo", "MSI", "Apple"],
+        "cpu": [
+          "Intel i3",
+          "Intel i5",
+          "Intel i7",
+          "Intel i9",
+          "AMD Ryzen 5",
+          "AMD Ryzen 7"
+        ],
+        "ram": ["4GB", "8GB", "16GB", "32GB"],
+        "storage": [
+          "128GB SSD",
+          "256GB SSD",
+          "512GB SSD",
+          "1TB SSD",
+          "1TB HDD"
+        ],
+        "screen_size": ["13 inch", "14 inch", "15.6 inch", "16 inch", "17 inch"]
+      }
+    },
+    {
+      "id": 2,
+      "name": "Linh kiện",
+      "code": "LINHKIEN",
+      "path": "/linh-kien",
+      "description": "Các linh kiện thay thế và nâng cấp laptop",
+      "types": [
+        {
+          "id": 5,
+          "name": "RAM",
+          "description": "Bộ nhớ tạm thời"
+        },
+        {
+          "id": 6,
+          "name": "SSD",
+          "description": "Ổ cứng tốc độ cao"
+        },
+        {
+          "id": 7,
+          "name": "HDD",
+          "description": "Ổ cứng dung lượng lớn"
+        },
+        {
+          "id": 8,
+          "name": "Pin Laptop",
+          "description": "Pin thay thế cho laptop"
+        }
+      ],
+      "meta_data": {
+        "brands": [
+          "Kingston",
+          "Corsair",
+          "Samsung",
+          "Crucial",
+          "WD",
+          "Seagate",
+          "Intel",
+          "AMD"
+        ],
+        "types": ["DDR4", "DDR5", "NVMe", "SATA", "2.5 inch", "M.2"]
+      }
+    },
+    {
+      "id": 3,
+      "name": "Phụ kiện",
+      "code": "PHUKIEN",
+      "path": "/phu-kien",
+      "description": "Phụ kiện hỗ trợ và bảo vệ laptop",
+      "types": [
+        {
+          "id": 11,
+          "name": "Chuột",
+          "description": "Chuột máy tính có dây và không dây"
+        },
+        {
+          "id": 12,
+          "name": "Bàn phím",
+          "description": "Bàn phím rời cho laptop"
+        },
+        {
+          "id": 13,
+          "name": "Tai nghe",
+          "description": "Tai nghe có dây và bluetooth"
+        },
+        {
+          "id": 14,
+          "name": "Túi chống sốc",
+          "description": "Túi bảo vệ laptop"
+        },
+        {
+          "id": 15,
+          "name": "Đế tản nhiệt",
+          "description": "Đế làm mát cho laptop"
+        },
+        {
+          "id": 16,
+          "name": "Adapter/Sạc",
+          "description": "Sạc thay thế cho laptop"
+        }
+      ],
+      "meta_data": {
+        "brands": [
+          "Logitech",
+          "Razer",
+          "Corsair"
+        ],
+        "colors": ["Black", "White", "Gray", "Red", "Blue"],
+        "connectivity": ["USB", "Bluetooth", "Wireless", "Type-C"]
+      }
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "title": "Laptop gaming Acer Nitro Lite 16 NL16 71G 71UJ",
+      "description": "Laptop gaming Acer Nitro Lite 16 NL16 71G 71UJ không chỉ mang đến hiệu suất mạnh mẽ cho các game thủ mà còn thiết kế tinh tế và tiện dụng. Dưới đây là đánh giá chi tiết về sản phẩm này, cùng những đặc tính, tính năng nổi bật giúp sản phẩm nổi bật trên thị trường.",
+      "category_id": 1,
+      "type_id": 2,
+      "brand": "Acer",
+      "price": 49.99,
+      "discount": 20,
+      "ram": "16GB",
+      "cpu": "Intel i7",
+      "screen_size": "16 inch",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/acer-gaming-nitro-lite-16-nl16-7_b9c923301cac40ec96fdf625748b97ff_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "laptop-gaming-acer-nitro-lite-16-nl16-71g-71uj"
+    },
+    {
+      "id": 2,
+      "title": "Laptop Dell XPS 9350 XPS9350-U5IA165W11GR-FP",
+      "description": "Dell, cái tên vẫn luôn nổi tiếng trong dòng laptop văn phòng với nhiều series như Inspiron, Vostro, Latitude hay XPS. Không chỉ nhờ vào thiết kế phù hợp với môi trường văn phòng mà còn mặt hiệu năng trên giá thành cực kì lý tưởng. Và đến nay thì bạn sẽ được một chiếc Dell XPS cao cấp ngay tại GEARVN với model Dell XPS 9350 XPS9350-U5IA165W11GR-FP.",
+      "category_id": 1,
+      "type_id": 1,
+      "brand": "Dell",
+      "price": 49.99,
+      "discount": 20,
+      "ram": "8GB",
+      "cpu": "Intel i5",
+      "screen_size": "13 inch",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/ava_a8b037f6920e4289bff21596106c8e86_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "laptop-dell-xps-9350-xps9350-u5ia165w11gr-fp"
+    },
+    {
+      "id": 3,
+      "title": "Laptop gaming ASUS ROG Zephyrus G14 GA403WM QS051WS",
+      "description": "ASUS ROG Zephyrus G14 GA403WM-QS051WS không chỉ là một chiếc laptop gaming, mà còn là một tác phẩm nghệ thuật kết hợp giữa sức mạnh vượt trội và thiết kế tinh tế. Dành cho những game thủ và nhà sáng tạo nội dung đòi hỏi sự hoàn hảo, G14 mới nhất này hứa hẹn mang đến trải nghiệm đỉnh cao trong mọi tác vụ. Cùng tìm hiểu về sản phẩm laptop này trong phần dưới đây!",
+      "category_id": 1,
+      "type_id": 2,
+      "brand": "Asus",
+      "price": 49.99,
+      "discount": 20,
+      "ram": "32GB",
+      "cpu": "Intel i9",
+      "screen_size": "17 inch",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/asus-rog-zephyrus-g14-ga403uv-qs171w_4aef4676f5ef4fddbb5fd6d0c5fec7d5_741f4a72b2fc48789569d9e292a0c0f7_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "laptop-gaming-asus-rog-zephyrus-g14-ga403wm-qs051ws"
+    },
+    {
+      "id": 4,
+      "title": "Ram Laptop Kingston 16GB DDR5 5600 Mhz CL46 1Rx8 KVR56S46BS8-16",
+      "description": "RAM laptop Kingston DDR5 16GB 5600MHz KVR56S46BS8-16 là một trong những linh kiện máy tính giúp nâng cao tốc độ và khả năng xử lý công việc hiệu quả. Nâng cấp laptop của người dùng trải nghiệm trọn vẹn hơn trong mọi nhu cầu hằng ngày, RAM Kingston là giải pháp tối ưu. ",
+      "category_id": 2,
+      "type_id": 5,
+      "brand": "Kingston",
+      "price": 49.99,
+      "discount": 20,
+      "types": "DDR5",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/50206_ram_laptop_kingston_16gb_d_ae299dfd65c746b592fae094f41e68b9_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "ram-laptop-kingston-16gb-ddr5-5600mhz-cl46-1rx8-kvr56s46bs8-16"
+    },
+    {
+      "id": 5,
+      "title": "Ổ cứng SSD Kingston NV3 500GB M.2 PCIe NVMe Gen4",
+      "description": "Ram chính hãng của Kingston",
+      "category_id": 2,
+      "type_id": 6,
+      "brand": "Kingston",
+      "price": 49.99,
+      "discount": 20,
+      "types": "DDR4",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/snv3s_500gb_pkg-lg_989b947a38a043e58b87ae7a31a6528a_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "ssd-kingston-nv3-500gb-m2-pcie-nvme-gen4"
+    },
+    {
+      "id": 6,
+      "title": "Ổ Cứng HDD Seagate 1TB 2.5' for Laptop - ST1000LM048",
+      "description": "Với chất lượng vượt trội và hiệu năng cao. HDD Seagate Barracuda là một sự lựa chọn tối ưu khi bạn muốn nâng cấp ổ cứng.Dung lượng cao và tốc độ đọc ghi nhanh hơn 5 lần ổ cứng thông thường. Giờ đây mọi thao tác trên máy tính của bạn diễn ra một cách nhanh chóng và mượt mà nhất có thể. Tăng hiệu năng toàn bộ của máy tính lên rất nhiều.",
+      "category_id": 2,
+      "type_id": 7,
+      "brand": "Seagate",
+      "price": 49.99,
+      "discount": 20,
+      "types": "SATA",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/acer-gaming-nitro-lite-16-nl16-7_b9c923301cac40ec96fdf625748b97ff_grande.png",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "hdd-seagate-1tb-25-inch-laptop-st1000lm048"
+    },
+    {
+      "id": 7,
+      "title": "Chuột Logitech G102 LightSync Black",
+      "description": "Laptop gaming Acer Nitro Lite 16 NL16 71G 71UJ không chỉ mang đến hiệu suất mạnh mẽ cho các game thủ mà còn thiết kế tinh tế và tiện dụng. Dưới đây là đánh giá chi tiết về sản phẩm này, cùng những đặc tính, tính năng nổi bật giúp sản phẩm nổi bật trên thị trường.",
+      "category_id": 3,
+      "type_id": 11,
+      "brand": "Logitech",
+      "price": 49.99,
+      "discount": 20,
+      "color": "Black, Blue, Red",
+      "connectivity": "Type-C",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/logitech-g102-lightsync-rgb-black-1_bf4f5774229c4a0f81b8e8a2feebe4d8_aeb4ae49ee844c3e9d315883d4e482d4_grande.jpg",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "chuot-logitech-g102-lightsync-black"
+    },
+    {
+      "id": 8,
+      "title": "Bàn phím Razer Huntsman V3 Pro TKL",
+      "description": "Bạn là một game thủ đam mê, luôn tìm kiếm sự chính xác, tốc độ và khả năng kiểm soát tối ưu trong mỗi trận đấu. Và giờ đây, với bàn phím Razer Huntsman V3 Pro TKL, bạn sẽ có được tất cả những điều đó và nhiều hơn nữa. Được trang bị công nghệ tiên tiến nhất của Razer, bàn phím này không chỉ là một công cụ, mà là vũ khí giúp bạn thống trị mọi cuộc chiến game.",
+      "category_id": 3,
+      "type_id": 12,
+      "brand": "Razer",
+      "price": 49.99,
+      "discount": 20,
+      "color": "Black, Gray, Red",
+      "connectivity": "USB",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/250-9303-ban-phim-razer-v3-pro-tenkeyless-1_b7d6ef40b1224ede9552186f348113da_grande.jpg",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "ban-phim-razer-huntsman-v3-pro-tkl"
+    },
+    {
+      "id": 9,
+      "title": "Tai nghe Corsair HS55 Wireless Core Black (CA-9011290-AP)",
+      "description": "Corsair là một cái tên đình đám trong làng game thủ. Nó ghi dấu ấn với người dùng qua những gaming gear ấn tượng đến những linh kiện máy tính chất lượng. Tai nghe Corsair HS55 Wireless Core Black không ngoài dự đoán trở thành cái tên nổi bật trong thời gian gần đây nhờ vào kiểu thiết kế hiện đại, đẹp mắt, độ trễ thấp cùng khả năng kết nối linh hoạt. Tất cả đã đưa Corsair HS55 lên một tầm cao mới so với những chiếc tai nghe không dây thông thường.",
+      "category_id": 3,
+      "type_id": 13,
+      "brand": "Corsair",
+      "price": 49.99,
+      "discount": 20,
+      "color": "Black, White",
+      "connectivity": "Bluetooth",
+      "thumbnail": "https://product.hstatic.net/200000722513/product/hinh-1_2735fbceb0a14ddb955bdf64b63e45b7_ac360205755f44648b50ec4bcf0a7fcd_grande.gif",
+      "images": [
+        "https://codedev.b-cdn.net/products/sweatshirt-black.jpg",
+        "https://codedev.b-cdn.net/products/woman-black-shirt-giving-neutral-flirtatious-poses.jpg",
+        "https://codedev.b-cdn.net/products/woman-holding-coffee-cup-smiling.jpg"
+      ],
+      "rating": 4.5,
+      "slug": "tai-nghe-corsair-hs55-wireless-core-black-ca-9011290-ap"
+    }
+  ]
+}
