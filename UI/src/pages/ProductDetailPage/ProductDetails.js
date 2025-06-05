@@ -32,87 +32,57 @@ const extraSections = [
 
 const ProductDetails = () => {
   const { product } = useLoaderData();
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(product?.thumbnail || "");
   const [breadCrumbLinks, setBreadCrumbLink] = useState([]);
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cartState?.cart);
   const [similarProduct, setSimilarProducts] = useState([]);
-  const categories = useSelector((state) => state?.categoryState?.categories);
   const [error, setError] = useState("");
 
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categoryState?.categories);
+
   const productCategory = useMemo(() => {
-    return categories?.find((category) => category?.id === product?.categoryId);
+    return categories?.find((cat) => cat?.id === product?.categoryId);
   }, [product, categories]);
 
+  const productType = useMemo(() => {
+    return productCategory?.categoryTypes?.find(
+      (type) => type?.id === product?.categoryTypeId
+    );
+  }, [productCategory, product]);
+
+  const colors = useMemo(() => {
+    return _.uniq(_.map(product?.variants, "color"));
+  }, [product]);
+
   useEffect(() => {
-    getAllProducts(product?.categoryId, product?.categoryTypeId)
-      .then((res) => {
-        const excludedProduct = res?.filter((item) => item?.id !== product?.id);
-        setSimilarProducts(excludedProduct);
-      })
-      .catch(() => []);
+    if (product?.categoryId && product?.categoryTypeId) {
+      getAllProducts(product.categoryId, product.categoryTypeId)
+        .then((res) => {
+          const filtered = res?.filter((item) => item?.id !== product?.id);
+          setSimilarProducts(filtered || []);
+        })
+        .catch(() => setSimilarProducts([]));
+    }
   }, [product?.categoryId, product?.categoryTypeId, product?.id]);
 
   useEffect(() => {
-    setImage(product?.thumbnail);
-    setBreadCrumbLink([]);
-    const arrayLinks = [
+    const links = [
       { title: "Shop", path: "/" },
-      {
-        title: productCategory?.name,
-        path: productCategory?.name,
-      },
-    ];
-    const productType = productCategory?.categoryTypes?.find(
-      (item) => item?.id === product?.categoryTypeId
-    );
+      productCategory && { title: productCategory.name, path: `/${productCategory.name}` },
+      productType && { title: productType.name, path: `/${productCategory?.name}/${productType.name}` },
+    ].filter(Boolean);
 
-    if (productType) {
-      arrayLinks?.push({
-        title: productType?.name,
-        path: productType?.name,
-      });
-    }
-    setBreadCrumbLink(arrayLinks);
-  }, [productCategory, product]);
-
-  // const addItemToCart = useCallback(() => {
-  //   //dispatch(addToCart({id:product?.id,quantity:1}));
-  //   //const selectedSize =
-  //   console.log("size ", selecteSize);
-  //   if (!selecteSize) {
-  //     setError("Please select size");
-  //   } else {
-  //     const selectedVariant = product?.variants?.filter(
-  //       (variant) => variant?.size === selecteSize
-  //     )?.[0];
-  //     console.log("selected ", selectedVariant);
-  //     if (selectedVariant?.stockQuantity > 0) {
-  //       dispatch(
-  //         addItemToCartAction({
-  //           productId: product?.id,
-  //           thumbnail: product?.thumbnail,
-  //           name: product?.name,
-  //           variant: selectedVariant,
-  //           quantity: 1,
-  //           subTotal: product?.price,
-  //           price: product?.price,
-  //         })
-  //       );
-  //     } else {
-  //       setError("Out of Stock");
-  //     }
-  //   }
-  // }, [dispatch, product]);
+    setBreadCrumbLink(links);
+  }, [productCategory, productType]);
 
   const addItemToCart = useCallback(() => {
-    // Nếu không có variant cụ thể vì bỏ size, thì dispatch trực tiếp
+    if (!product) return;
     dispatch(
       addItemToCartAction({
         productId: product.id,
         thumbnail: product.thumbnail,
-        name: product.title,
-        variant: null,
+        name: product.name,
+        variant: null, // nếu không dùng size hoặc biến thể cụ thể
         quantity: 1,
         subTotal: product.price,
         price: product.price,
@@ -121,11 +91,9 @@ const ProductDetails = () => {
     setError("");
   }, [dispatch, product]);
 
-  const colors = useMemo(() => {
-    const colorSet = _.uniq(_.map(product?.variants, "color"));
-    return colorSet;
-  }, [product]);
-
+  if (!product) {
+    return <div className="text-center py-10 text-red-600">Không tìm thấy sản phẩm.</div>;
+  }
   return (
     <>
       <div className="flex flex-col md:flex-row px-10">
@@ -167,18 +135,6 @@ const ProductDetails = () => {
           <Rating rating={product?.rating} />
           {/* Price Tag */}
           <p className="text-xl bold py-2">${product?.price}</p>
-          <div className="flex flex-col py-2">
-            <div className="flex gap-2">
-              <p className="text-sm bold">Select Size</p>
-              <Link
-                className="text-sm text-gray-500 hover:text-gray-900"
-                to={"https://en.wikipedia.org/wiki/Clothing_sizes"}
-                target="_blank"
-              >
-                {"Size Guide ->"}
-              </Link>
-            </div>
-          </div>
           <div>
             <p className="text-lg bold">Colors Available</p>
             <ProductColors colors={colors} />

@@ -2,7 +2,12 @@ import React from "react";
 import SectionHeading from "../SectionsHeading/SectionHeading";
 import Card from "../../Card/Card";
 
+
 const Category = ({ title, data }) => {
+  const handleClickCategoryType=(title)=>{
+    console.log(title);
+  }
+
   return (
     <>
       <SectionHeading title={title} />
@@ -18,7 +23,7 @@ const Category = ({ title, data }) => {
                 actionArrow={true}
                 height={"240px"}
                 width={"200px"}
-                // onClick={() => handleClickCategoryType(item.title)}
+                onClick={() => handleClickCategoryType(item.title)}
               />
             );
           })}

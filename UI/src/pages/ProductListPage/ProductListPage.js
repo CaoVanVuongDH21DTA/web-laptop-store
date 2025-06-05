@@ -9,7 +9,7 @@ import { getAllProducts } from "../../api/fetchProducts";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/features/common";
 import { useParams } from "react-router-dom";
-import { fetchCategoriesCode } from "../../api/fetchCategories";
+import { fetchCategories, fetchCategoriesCode } from "../../api/fetchCategories";
 import { filterProducts } from "../../components/Filters/FilterProducts";
 import axios from "axios";
 import {
@@ -36,28 +36,48 @@ const ProductListPage = () => {
     price: { min: 0, max: 500 },
   });
 
+  const slugToCode = (slug) => {
+    if (!slug) return "";
+    return slug.replace(/-/g, "").toUpperCase();
+  };
+
+
   useEffect(() => {
+    console.log("Raw categorySlug from route:", categorySlug);
+
   const fetchData = async () => {
     dispatch(setLoading(true));
     try {
-      // Lấy tất cả categories
-      const categories = await fetchCategoriesCode();
+      const categories = await fetchCategories();
+      console.log("Fetched categories:", categories);
 
-      // Tìm category có code trùng với slug
+      const codeFromSlug = slugToCode(categorySlug);
+      console.log("Code from slug:", codeFromSlug);
+
       const foundCategory = categories?.find(
-        (cat) => cat.code.toLowerCase() === categorySlug?.toLowerCase()
+        (cat) => cat.code.toUpperCase() === codeFromSlug
       );
+      console.log("Matched category:", foundCategory);
 
       setCategory(foundCategory || null);
 
       if (foundCategory?.id) {
-        // Lấy sản phẩm theo categoryId
-        const productsRes = await axios.get(
-          `${API_BASE_URL}/api/products?categoryId=${foundCategory.id}`,
-          { headers: getHeaders() }
-        );
+        const typeId = filters.types?.[0] ?? null;
+
+        const url = `${API_BASE_URL}/api/products?categoryId=${foundCategory.id}`
+          + (typeId ? `&typeId=${typeId}` : "");
+
+        console.log("Requesting product URL:", url);
+
+        const productsRes = await axios.get(url, {
+          headers: getHeaders(),
+        });
+
+        console.log("Products response data:", productsRes.data);
+
         setProducts(productsRes.data || []);
       } else {
+        console.warn("Category not found or no ID matched.");
         setProducts([]);
       }
     } catch (err) {
@@ -69,7 +89,7 @@ const ProductListPage = () => {
   };
 
   fetchData();
-}, [categorySlug, dispatch]);
+}, [categorySlug, filters.types, dispatch]);
 
 
   const categoryType = category?.code?.toUpperCase();
@@ -192,7 +212,7 @@ const ProductListPage = () => {
         <div className="p-[15px]">
           <p className="text-black text-lg">{category?.description}</p>
           <div className="pt-4 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-8 px-2">
-            {filteredProducts?.map((item, index) => (
+            {products?.map((item, index) => (
               <ProductCard
                 key={item?.id + "_" + index}
                 {...item}

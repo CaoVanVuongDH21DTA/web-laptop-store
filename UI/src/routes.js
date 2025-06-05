@@ -30,17 +30,22 @@ export const router = createBrowserRouter([
             element:<Shop />
         },
         {
-            path:"/laptop",
-            element:<ProductListPage categoryType={'LAPTOP'}/>,
+          path: "/:categorySlug",
+          element: <ProductListPage />,
         },
-        {
-            path:"/linh-kien",
-            element:<ProductListPage categoryType={'LINHKIEN'}/>,
-        },
-        {
-          path:"/phu-kien",
-          element:<ProductListPage categoryType={'PHUKIEN'}/>,
-        },
+
+        // {
+        //     path:"/laptop",
+        //     element:<ProductListPage categoryType={'LAPTOP'}/>,
+        // },
+        // {
+        //     path:"/linh-kien",
+        //     element:<ProductListPage categoryType={'LINHKIEN'}/>,
+        // },
+        // {
+        //   path:"/phu-kien",
+        //   element:<ProductListPage categoryType={'PHUKIEN'}/>,
+        // },
         {
           path:"/product/:slug",
           loader: loadProductBySlug,
