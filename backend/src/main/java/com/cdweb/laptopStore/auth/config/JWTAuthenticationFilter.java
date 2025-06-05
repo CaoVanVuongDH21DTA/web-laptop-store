@@ -9,12 +9,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.*;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
     private final UserDetailsService userDetailsService;
     private final JWTTokenHelper jwtTokenHelper;
 
@@ -25,34 +28,52 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getServletPath();
 
-            String authHeader = request.getHeader("Authorization");
+        // Danh sách các đường dẫn public mà không cần JWT xác thực
+        List<String> publicPaths = Arrays.asList(
+            "/api/auth/**",
+            "/api/category/**",
+            "/api/products/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+        );
 
-            if(null == authHeader || !authHeader.startsWith("Bearer")){
-                filterChain.doFilter(request,response);
-                return;
-            }
+        boolean isPublic = publicPaths.stream()
+            .anyMatch(pattern -> pathMatcher.match(pattern, path));
 
-            try{
-                String authToken = jwtTokenHelper.getToken(request);
-                if(null != authToken){
-                    String userName = jwtTokenHelper.getUserNameFromToken(authToken);
-                    if(null != userName){
-                        UserDetails userDetails= userDetailsService.loadUserByUsername(userName);
+        if (isPublic) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                        if(jwtTokenHelper.validateToken(authToken,userDetails)) {
-                            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                            authenticationToken.setDetails(new WebAuthenticationDetails(request));
+        // Xử lý JWT token như cũ
+        String authHeader = request.getHeader("Authorization");
 
-                            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                        }
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String authToken = jwtTokenHelper.getToken(request);
+            if (authToken != null) {
+                String userName = jwtTokenHelper.getUserNameFromToken(authToken);
+                if (userName != null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+                    if (jwtTokenHelper.validateToken(authToken, userDetails)) {
+                        UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authenticationToken.setDetails(new WebAuthenticationDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
-
                 }
-                filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
 

@@ -18,6 +18,7 @@ public class CategoryDto {
     private String name;
     private String code;
     private String description;
+    private String img_category;
     private List<CategoryTypeDto> categoryTypes;
-
+    private List<CategoryBrandDto> categoryBrands;
 }

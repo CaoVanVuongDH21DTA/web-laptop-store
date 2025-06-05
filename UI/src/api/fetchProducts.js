@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL, API_URLS } from "./constant"
+import { API_BASE_URL, API_URLS, getHeaders } from "./constant"
 import content from '../data/content.json'; // Đường dẫn đúng tới content.json
 
 
@@ -19,6 +19,24 @@ export const getAllProducts = async (id,typeId)=>{
         console.error(err);
     }
 }
+
+// export const getAllProducts = async (id, typeId) => {
+//   let url = API_BASE_URL + API_URLS.GET_PRODUCTS + `?categoryId=${id}`;
+//   if (typeId) {
+//     url += `&typeId=${typeId}`;
+//   }
+
+//   try {
+//     const result = await axios.get(url, {
+//       headers: getHeaders(), // nếu cần token, hoặc loại bỏ nếu ko cần
+//     });
+//     return result?.data;
+//   } catch (err) {
+//     console.error("Error fetching products:", err.response?.data || err.message);
+//   }
+// };
+
+
 
 // export const getProductBySlug = async (slug)=>{
 //     const url = API_BASE_URL + API_URLS.GET_PRODUCTS + `?slug=${slug}`;

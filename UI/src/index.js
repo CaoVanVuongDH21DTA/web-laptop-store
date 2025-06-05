@@ -8,6 +8,9 @@ import { router } from './routes';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import ShopApplicationWrapper from './pages/ShopApplicationWrapper';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

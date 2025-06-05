@@ -30,6 +30,9 @@ public class CategoryType {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String img_category;
+
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)
     @JsonIgnore

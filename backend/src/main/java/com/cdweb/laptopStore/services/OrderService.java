@@ -131,7 +131,6 @@ public class OrderService {
     }
 
     private List<OrderItemDetail> getItemDetails(List<OrderItem> orderItemList) {
-
         return orderItemList.stream().map(orderItem -> {
             return OrderItemDetail.builder()
                     .id(orderItem.getId())

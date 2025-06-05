@@ -31,9 +31,11 @@ public class Product {
 
     @Column(nullable = false)
     private BigDecimal price;
-
-    @Column(nullable = false)
-    private String brand;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id",nullable = false)
+    @JsonIgnore
+    private CategoryBrand categoryBrand;
 
     @Column
     private Float rating;
@@ -61,7 +63,7 @@ public class Product {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryType_id",nullable = false)
+    @JoinColumn(name = "category_type_id",nullable = false)
     @JsonIgnore
     private CategoryType categoryType;
 

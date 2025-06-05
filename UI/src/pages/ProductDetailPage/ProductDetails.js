@@ -5,7 +5,6 @@ import content from "../../data/content.json";
 import Rating from "../../components/Rating/Rating";
 import ProductColors from "./ProductColors";
 import SvgCreditCard from "../../components/common/SvgCreditCard";
-import SvgCloth from "../../components/common/SvgCloth";
 import SvgShipping from "../../components/common/SvgShipping";
 import SvgReturn from "../../components/common/SvgReturn";
 import SectionHeading from "../../components/Sections/SectionsHeading/SectionHeading";
@@ -15,15 +14,11 @@ import _ from "lodash";
 import { getAllProducts } from "../../api/fetchProducts";
 import { addItemToCartAction } from "../../store/actions/cartAction";
 
-//const categories = content?.categories;
+// const categories = content?.categories;
 const extraSections = [
   {
     icon: <SvgCreditCard />,
     label: "Secure payment",
-  },
-  {
-    icon: <SvgCloth />,
-    label: "Size & Fit",
   },
   {
     icon: <SvgShipping />,

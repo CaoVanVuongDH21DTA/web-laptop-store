@@ -3,15 +3,14 @@ package com.cdweb.laptopStore.controllers;
 import com.cdweb.laptopStore.dto.ProductDto;
 import com.cdweb.laptopStore.entities.Product;
 import com.cdweb.laptopStore.services.ProductService;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,16 +24,22 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts(@RequestParam(required = false,name = "categoryId",value = "categoryId") UUID categoryId, @RequestParam(required = false,name = "typeId",value = "typeId") UUID typeId, @RequestParam(required = false) String slug, HttpServletResponse response){
+    public ResponseEntity<List<ProductDto>> getAllProducts(
+            @RequestParam(required = false) UUID categoryId,
+            @RequestParam(required = false) UUID typeId,
+            @RequestParam(required = false) String slug,
+            HttpServletResponse response
+    ) {
         List<ProductDto> productList = new ArrayList<>();
-        if(StringUtils.isNotBlank(slug)){
+
+        if (StringUtils.isNotBlank(slug)) {
             ProductDto productDto = productService.getProductBySlug(slug);
-            productList.add(productDto);
-        }
-        else {
+            if (productDto != null) productList.add(productDto);
+        } else {
             productList = productService.getAllProducts(categoryId, typeId);
         }
-        response.setHeader("Content-Range",String.valueOf(productList.size()));
+
+        response.setHeader("Content-Range", String.valueOf(productList.size()));
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
@@ -56,6 +61,4 @@ public class ProductController {
         Product product = productService.updateProduct(productDto,id);
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
-
-
 }

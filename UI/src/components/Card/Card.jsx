@@ -21,7 +21,7 @@ const Card = ({
           width={width ?? "200px"}
           height={height ?? "220px"}
           src={imagePath}
-          alt="Jeans"
+          alt={title}
           style={{
             mixBlendMode: "color-burn",
             objectFit: "contain",

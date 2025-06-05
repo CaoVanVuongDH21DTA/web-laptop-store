@@ -37,7 +37,7 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize)-> authorize
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/products","/api/category").permitAll()
+                .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .requestMatchers("/oauth2/success").permitAll()
                 .anyRequest().authenticated())
                 .oauth2Login((oauth2login)-> oauth2login.defaultSuccessUrl("/oauth2/success").loginPage("/oauth2/authorization/google"))
@@ -58,9 +58,7 @@ public class WebSecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 
         return new ProviderManager(daoAuthenticationProvider);
-
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){

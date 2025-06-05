@@ -14,10 +14,11 @@ const Category = ({ title, data }) => {
                 key={index}
                 title={item?.title}
                 description={item?.description}
-                imagePath={item?.image}
+                imagePath={item?.img_category}
                 actionArrow={true}
                 height={"240px"}
                 width={"200px"}
+                // onClick={() => handleClickCategoryType(item.title)}
               />
             );
           })}

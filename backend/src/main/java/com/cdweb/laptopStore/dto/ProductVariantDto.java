@@ -15,6 +15,5 @@ public class ProductVariantDto {
 
     private UUID id;
     private String color;
-    private String size;
     private Integer stockQuantity;
 }

@@ -18,41 +18,56 @@ public class ProductMapper {
     @Autowired
     private CategoryService categoryService;
 
-    public Product mapToProductEntity(ProductDto productDto){
+    public Product mapToProductEntity(ProductDto productDto) {
         Product product = new Product();
-        if(null != productDto.getId()){
+        Category category = categoryService.getCategory(productDto.getCategoryId());
+        if (productDto.getId() != null) {
             product.setId(productDto.getId());
         }
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
-        product.setBrand(productDto.getBrand());
+
+        if (category != null) {
+            product.setCategory(category);
+            UUID categoryBrandId = productDto.getCategoryBrandId();
+
+            CategoryBrand categoryBrand = category.getCategoryBrands().stream()
+                    .filter(ct -> ct.getId().equals(categoryBrandId))
+                    .findFirst()
+                    .orElse(null);
+            product.setCategoryBrand(categoryBrand);
+        } else {
+            System.out.println("CategoryBrand not found");
+        }
+
         product.setNewArrival(productDto.isNewArrival());
         product.setPrice(productDto.getPrice());
         product.setRating(productDto.getRating());
         product.setSlug(productDto.getSlug());
 
-        Category category = categoryService.getCategory(productDto.getCategoryId());
-        if(null != category){
+        if (category != null) {
             product.setCategory(category);
             UUID categoryTypeId = productDto.getCategoryTypeId();
 
-            CategoryType categoryType = category.getCategoryTypes().stream().filter(categoryType1 -> categoryType1.getId().equals(categoryTypeId)).findFirst().orElse(null);
+            CategoryType categoryType = category.getCategoryTypes().stream()
+                    .filter(ct -> ct.getId().equals(categoryTypeId))
+                    .findFirst()
+                    .orElse(null);
             product.setCategoryType(categoryType);
+        } else {
+            System.out.println("CategoryType not found");
         }
 
-        if(null != productDto.getVariants()){
-            product.setProductVariants(mapToProductVariant(productDto.getVariants(),product));
+        if (productDto.getVariants() != null) {
+            product.setProductVariants(mapToProductVariant(productDto.getVariants(), product));
         }
 
-        if(null != productDto.getProductResources()){
-            product.setResources(mapToProductResources(productDto.getProductResources(),product));
+        if (productDto.getProductResources() != null) {
+            product.setResources(mapToProductResources(productDto.getProductResources(), product));
         }
-
-
 
         return product;
     }
-
     private List<Resources> mapToProductResources(List<ProductResourceDto> productResources, Product product) {
 
         return productResources.stream().map(productResourceDto -> {
@@ -69,10 +84,10 @@ public class ProductMapper {
         }).collect(Collectors.toList());
     }
 
-    private List<ProductVariant> mapToProductVariant(List<ProductVariantDto> productVariantDtos, Product product){
+    private List<ProductVariant> mapToProductVariant(List<ProductVariantDto> productVariantDtos, Product product) {
         return productVariantDtos.stream().map(productVariantDto -> {
             ProductVariant productVariant = new ProductVariant();
-            if(null != productVariantDto.getId()){
+            if (productVariantDto.getId() != null) {
                 productVariant.setId(productVariantDto.getId());
             }
             productVariant.setColor(productVariantDto.getColor());
@@ -87,21 +102,51 @@ public class ProductMapper {
     }
 
     public ProductDto mapProductToDto(Product product) {
-
-        return ProductDto.builder()
+        ProductDto.ProductDtoBuilder builder = ProductDto.builder()
                 .id(product.getId())
-                .brand(product.getBrand())
                 .name(product.getName())
                 .price(product.getPrice())
                 .isNewArrival(product.isNewArrival())
                 .rating(product.getRating())
                 .description(product.getDescription())
                 .slug(product.getSlug())
-                .thumbnail(getProductThumbnail(product.getResources())).build();
+                .thumbnail(getProductThumbnail(product.getResources()));
+
+        // Lấy tên thương hiệu từ categoryBrand
+        if (product.getCategoryBrand() != null) {
+            builder 
+                .categoryBrandId(product.getCategoryBrand().getId())
+                .categoryBrandName(product.getCategoryBrand().getName());
+        }
+
+        if (product.getCategory() != null) {
+            builder.categoryId(product.getCategory().getId());
+            builder.categoryName(product.getCategory().getName());
+        }
+
+        if (product.getCategoryType() != null) {
+            builder.categoryTypeId(product.getCategoryType().getId());
+            builder.categoryTypeName(product.getCategoryType().getName());
+        }
+
+        if (product.getProductVariants() != null) {
+            builder.variants(mapProductVariantListToDto(product.getProductVariants()));
+        }
+
+        if (product.getResources() != null) {
+            builder.productResources(mapProductResourcesListDto(product.getResources()));
+        }
+
+        return builder.build();
     }
 
+
     private String getProductThumbnail(List<Resources> resources) {
-        return resources.stream().filter(Resources::getIsPrimary).findFirst().orElse(null).getUrl();
+        return resources.stream()
+            .filter(Resources::getIsPrimary)
+            .findFirst()
+            .map(Resources::getUrl)   
+            .orElse(null);  
     }
 
     public List<ProductVariantDto> mapProductVariantListToDto(List<ProductVariant> productVariants) {

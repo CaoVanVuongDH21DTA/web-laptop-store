@@ -5,6 +5,7 @@ export const API_URLS = {
     GET_PRODUCT: (id) => `/api/product/${id}`,
     GET_CATEGORIES:'/api/category',
     GET_CATEGORY: (id) => `/api/category/${id}`,
+    GET_CATEGORY_CODE: (code) => `/api/category/code/${code}`,
 }
 
 export const API_BASE_URL = 'http://localhost:8080';

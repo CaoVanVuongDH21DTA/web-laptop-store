@@ -1,8 +1,10 @@
 package com.cdweb.laptopStore.services;
 
+import com.cdweb.laptopStore.dto.CategoryBrandDto;
 import com.cdweb.laptopStore.dto.CategoryDto;
 import com.cdweb.laptopStore.dto.CategoryTypeDto;
 import com.cdweb.laptopStore.entities.Category;
+import com.cdweb.laptopStore.entities.CategoryBrand;
 import com.cdweb.laptopStore.entities.CategoryType;
 import com.cdweb.laptopStore.exceptions.ResourceNotFoundEx;
 import com.cdweb.laptopStore.repositories.CategoryRepository;
@@ -18,6 +20,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public Optional<Category> getCategoryByCode(String code) {
+        return categoryRepository.findByCode(code.toLowerCase());
+    }
+
     public Category getCategory(UUID categoryId){
         Optional<Category> category = categoryRepository.findById(categoryId);
         return category.orElse(null);
@@ -29,18 +35,34 @@ public class CategoryService {
     }
 
     private Category mapToEntity(CategoryDto categoryDto){
-        Category category = Category.builder()
-                .code(categoryDto.getCode())
-                .name(categoryDto.getName())
-                .description(categoryDto.getDescription())
-                .build();
+    Category category = Category.builder()
+            .code(categoryDto.getCode())
+            .name(categoryDto.getName())
+            .description(categoryDto.getDescription())
+            .build();
 
-        if(null != categoryDto.getCategoryTypes()){
-            List<CategoryType> categoryTypes = mapToCategoryTypesList(categoryDto.getCategoryTypes(),category);
-            category.setCategoryTypes(categoryTypes);
-        }
+    if (categoryDto.getCategoryTypes() != null) {
+        List<CategoryType> categoryTypes = mapToCategoryTypesList(categoryDto.getCategoryTypes(), category);
+        category.setCategoryTypes(categoryTypes);
+    }
 
-        return  category;
+    if (categoryDto.getCategoryBrands() != null) {
+        List<CategoryBrand> categoryBrands = mapToCategoryBrandList(categoryDto.getCategoryBrands(), category);
+        category.setCategoryBrands(categoryBrands);
+    }
+
+    return category;
+}
+
+    private List<CategoryBrand> mapToCategoryBrandList(List<CategoryBrandDto> brandDtos, Category category) {
+        return brandDtos.stream().map(dto -> {
+            CategoryBrand brand = new CategoryBrand();
+            brand.setCode(dto.getCode());
+            brand.setName(dto.getName());
+            brand.setDescription(dto.getDescription());
+            brand.setCategory(category);
+            return brand;
+        }).collect(Collectors.toList());
     }
 
     private List<CategoryType> mapToCategoryTypesList(List<CategoryTypeDto> categoryTypeList, Category category) {

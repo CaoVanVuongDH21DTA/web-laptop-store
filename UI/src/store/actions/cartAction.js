@@ -25,10 +25,15 @@ export const delteItemFromCartAction = (payload)=>{
     }
 }
 
-const updateLocalStorage = (state)=>{
-    const {cartState} = state();
-    localStorage.setItem('cart',JSON.stringify(cartState?.cart))
-}
+const updateLocalStorage = (state) => {
+    const fullState = state(); // <-- Đây là toàn bộ redux state
+    console.log("STATE in updateLocalStorage", fullState);
+    
+    const { cartState } = fullState;
+    console.log("Cart inside cartState: ", cartState?.cart);
+
+    localStorage.setItem('cart', JSON.stringify(cartState?.cart));
+};
 
 export const clearCart = ()=>{
     return (dispatch,state) =>{

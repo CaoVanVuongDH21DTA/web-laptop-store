@@ -4,6 +4,7 @@ import com.cdweb.laptopStore.dto.ProductDto;
 import com.cdweb.laptopStore.entities.*;
 import com.cdweb.laptopStore.exceptions.ResourceNotFoundEx;
 import com.cdweb.laptopStore.mapper.ProductMapper;
+import com.cdweb.laptopStore.repositories.CategoryRepository;
 import com.cdweb.laptopStore.repositories.ProductRepository;
 import com.cdweb.laptopStore.specification.ProductSpecification;
 import org.apache.coyote.BadRequestException;
@@ -11,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ProductServiceImpl implements ProductService{
+
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private ProductRepository productRepository;
@@ -42,6 +47,8 @@ public class ProductServiceImpl implements ProductService{
         }
 
         List<Product> products = productRepository.findAll(productSpecification);
+        log.info("Filtering products with categoryId = {}, typeId = {}, resultCount = {}", categoryId, typeId, products.size());
+
         return productMapper.getProductDtos(products);
     }
 
@@ -81,6 +88,4 @@ public class ProductServiceImpl implements ProductService{
     public Product fetchProductById(UUID id) throws Exception {
         return productRepository.findById(id).orElseThrow(BadRequestException::new);
     }
-
-
 }
