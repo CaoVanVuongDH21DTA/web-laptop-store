@@ -1,10 +1,7 @@
 package com.cdweb.laptopStore.services;
 
 import com.cdweb.laptopStore.dto.ProductDto;
-import com.cdweb.laptopStore.dto.ProductFilterRequest;
-import com.cdweb.laptopStore.dto.ProductSpecificationDto;
 import com.cdweb.laptopStore.entities.Product;
-import com.cdweb.laptopStore.entities.ProductSpecification;
 
 import org.springframework.data.jpa.domain.Specification;
 
