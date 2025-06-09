@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "categories")
 @Data
@@ -31,6 +33,10 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<CategoryType> categoryTypes;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<CategoryBrand> categoryBrands;
 }

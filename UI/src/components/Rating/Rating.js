@@ -2,25 +2,34 @@ import React, { useMemo } from 'react'
 import SvgStarIcon from '../common/SvgStarIcon';
 import { SvgEmptyStar } from '../common/SvgEmptyStar';
 
+const Star = ({ fillPercent = 0 }) => {
+  return (
+    <svg viewBox="0 0 24 24" className="w-5 h-5">
+      <defs>
+        <linearGradient id={`grad-${fillPercent}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset={`${fillPercent}%`} stopColor="#facc15" />
+          <stop offset={`${fillPercent}%`} stopColor="#e5e7eb" />
+        </linearGradient>
+      </defs>
+      <path
+        fill={`url(#grad-${fillPercent})`}
+        stroke="#d1d5db"
+        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24
+           l-7.19-.61L12 2 9.19 8.63 2 9.24
+           l5.46 4.73L5.82 21z"
+      />
+    </svg>
+  );
+};
+
 const Rating = ({ rating }) => {
-  // Chuyển rating thành số nguyên từ 0 đến 5
-  const validRating = Math.min(5, Math.max(0, Math.floor(Number(rating) || 0)));
-
-  const ratingNumber = useMemo(() => {
-    return new Array(validRating).fill();
-  }, [validRating]);
-
-  const emptyStarsCount = 5 - validRating;
+  const clampedRating = Math.max(0, Math.min(5, Number(rating) || 0));
+  const fillPercent = useMemo(() => Math.round((clampedRating / 5) * 100), [clampedRating]);
 
   return (
-    <div className="flex items-center">
-      {ratingNumber.map((_, index) => (
-        <SvgStarIcon key={index} />
-      ))}
-      {new Array(emptyStarsCount).fill().map((_, index) => (
-        <SvgEmptyStar key={'empty-' + index} />
-      ))}
-      <p className="px-2 text-gray-500">{rating}</p>
+    <div className="flex items-center" title={`Rating: ${clampedRating.toFixed(1)}/5`}>
+      <Star fillPercent={fillPercent} />
+      <p className="px-2 text-sm text-gray-500">{clampedRating.toFixed(1)}</p>
     </div>
   );
 };

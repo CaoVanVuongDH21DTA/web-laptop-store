@@ -10,6 +10,8 @@ export const loadProductBySlug = async ({params}) =>{
         return {product};
     }
     catch(err){
-
+        store.dispatch(setLoading(false));
+        console.error("Failed to load product:", err);
+        return { product: null };
     }
 }

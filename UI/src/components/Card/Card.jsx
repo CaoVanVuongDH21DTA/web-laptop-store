@@ -11,8 +11,8 @@ const Card = ({
   onClick
 }) => {
   return (
-    <div className="flex flex-col p-6" onClick={onClick}>
-      <div className="flex justify-center align-center h-[250px]">
+    <div className="flex flex-col p-6">
+      <div className="flex justify-center align-center h-[250px] " onClick={onClick}>
         <img
           className={`h-[${height ? height : "220px"}] max-h-[${
             height ? height : "220px"
@@ -21,7 +21,7 @@ const Card = ({
           width={width ?? "200px"}
           height={height ?? "220px"}
           src={imagePath}
-          alt="Jeans"
+          alt={title}
           style={{
             mixBlendMode: "color-burn",
             objectFit: "contain",

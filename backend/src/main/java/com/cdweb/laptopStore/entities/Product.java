@@ -1,6 +1,8 @@
 package com.cdweb.laptopStore.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,9 +33,11 @@ public class Product {
 
     @Column(nullable = false)
     private BigDecimal price;
-
-    @Column(nullable = false)
-    private String brand;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id",nullable = false)
+    @JsonIgnore
+    private CategoryBrand categoryBrand;
 
     @Column
     private Float rating;
@@ -61,7 +65,7 @@ public class Product {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryType_id",nullable = false)
+    @JoinColumn(name = "category_type_id",nullable = false)
     @JsonIgnore
     private CategoryType categoryType;
 
@@ -78,4 +82,13 @@ public class Product {
     protected void onUpdate() {
         updatedAt = new java.util.Date();
     }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ProductSpecification> productSpecifications;
+
+    public List<ProductSpecification> getProductSpecifications() {
+        return productSpecifications;
+    }
+
 }

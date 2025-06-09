@@ -1,45 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from "react";
 
-const MetaDataFilter = ({ title = 'Kích cỡ màn hình', data = [], hideTitle = false, multi = true, onChange }) => {
-  const [appliedValues, setAppliedValues] = useState([]);
-
-  const onClickValue = useCallback((item) => {
-    if (appliedValues.includes(item)) {
-      setAppliedValues(appliedValues.filter(value => value !== item));
+const MetaDataFilter = ({ title, data = [], selectedValues = [], onChange }) => {
+  const handleCheckboxChange = (value, checked) => {
+    let newSelected;
+    if (checked) {
+      newSelected = [...selectedValues, value.name];
     } else {
-      if (multi) {
-        setAppliedValues([...appliedValues, item]);
-      } else {
-        setAppliedValues([item]);
-      }
+      newSelected = selectedValues.filter((v) => v !== value.name);
     }
-  }, [appliedValues, multi]);
-
-  useEffect(() => {
-    onChange && onChange(appliedValues);
-  }, [appliedValues, onChange]);
+    onChange(newSelected);
+  };
 
   return (
-    <div className={`flex flex-col ${hideTitle ? '' : 'mb-4'}`}>
-      {!hideTitle && <p className='text-[16px] text-black mt-5 mb-5'>{title}</p>}
-      <div className='flex flex-wrap px-2'>
-        {data?.map((item, index) => (
-          <div key={index} className='flex flex-col mr-2'>
-            <div
-              className='w-max px-3 py-1 border text-center mb-4 rounded-lg cursor-pointer hover:scale-105 bg-white border-gray-500 text-gray-500'
-              style={appliedValues.includes(item) ? {
-                background: 'black',
-                color: 'white'
-              } : {}}
-              onClick={() => onClickValue(item)}
-            >
-              {item}
-            </div>
-          </div>
+    <div className="mt-5">
+      <p className="text-[16px] text-black">{title}</p>
+      <div className="flex flex-col gap-2 mt-2">
+        {data.map((value, index) => (
+          <label key={index} className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              value={value.id}
+              checked={selectedValues.includes(value.name)}
+              onChange={(e) => handleCheckboxChange(value, e.target.checked)}
+            />
+            <span>{value.name}</span>
+          </label>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default MetaDataFilter;
