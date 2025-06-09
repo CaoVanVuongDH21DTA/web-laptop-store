@@ -1,15 +1,20 @@
 package com.cdweb.laptopStore.services;
 
 import com.cdweb.laptopStore.dto.ProductDto;
-import com.cdweb.laptopStore.entities.*;
+import com.cdweb.laptopStore.dto.ProductFilterRequest;
+import com.cdweb.laptopStore.dto.ProductSpecificationDto;
+import com.cdweb.laptopStore.entities.Product;
+import com.cdweb.laptopStore.entities.ProductSpecification;
+
+import org.springframework.data.jpa.domain.Specification;
+
 import com.cdweb.laptopStore.exceptions.ResourceNotFoundEx;
 import com.cdweb.laptopStore.mapper.ProductMapper;
-import com.cdweb.laptopStore.repositories.CategoryRepository;
 import com.cdweb.laptopStore.repositories.ProductRepository;
-import com.cdweb.laptopStore.specification.ProductSpecification;
+import com.cdweb.laptopStore.specification.ProductSpecs;
+
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -40,10 +45,10 @@ public class ProductServiceImpl implements ProductService{
         Specification<Product> productSpecification= Specification.where(null);
 
         if(null != categoryId){
-            productSpecification = productSpecification.and(ProductSpecification.hasCategoryId(categoryId));
+            productSpecification = productSpecification.and(ProductSpecs.hasCategoryId(categoryId));
         }
         if(null != typeId){
-            productSpecification = productSpecification.and(ProductSpecification.hasCategoryTypeId(typeId));
+            productSpecification = productSpecification.and(ProductSpecs.hasCategoryTypeId(typeId));
         }
 
         List<Product> products = productRepository.findAll(productSpecification);
@@ -54,11 +59,10 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductDto getProductBySlug(String slug) {
-        Product product= productRepository.findBySlug(slug);
-        if(null == product){
-            throw new ResourceNotFoundEx("Product Not Found!");
-        }
-        ProductDto productDto = productMapper.mapProductToDto(product);
+        Product product = productRepository.findBySlugWithSpecifications(slug)
+            .orElseThrow(() -> new ResourceNotFoundEx("Product Not Found!"));
+
+        ProductDto productDto = productMapper.mapToProductDto(product);
         productDto.setCategoryId(product.getCategory().getId());
         productDto.setCategoryTypeId(product.getCategoryType().getId());
         productDto.setVariants(productMapper.mapProductVariantListToDto(product.getProductVariants()));
@@ -69,7 +73,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public ProductDto getProductById(UUID id) {
         Product product= productRepository.findById(id).orElseThrow(()-> new ResourceNotFoundEx("Product Not Found!"));
-        ProductDto productDto = productMapper.mapProductToDto(product);
+        ProductDto productDto = productMapper.mapToProductDto(product);
         productDto.setCategoryId(product.getCategory().getId());
         productDto.setCategoryTypeId(product.getCategoryType().getId());
         productDto.setVariants(productMapper.mapProductVariantListToDto(product.getProductVariants()));

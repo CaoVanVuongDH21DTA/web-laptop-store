@@ -6,6 +6,7 @@ export const API_URLS = {
     GET_CATEGORIES:'/api/category',
     GET_CATEGORY: (id) => `/api/category/${id}`,
     GET_CATEGORY_CODE: (code) => `/api/category/code/${code}`,
+    GET_CATEGORY_FILTER: (id) => `/api/category/${id}/filters`,
 }
 
 export const API_BASE_URL = 'http://localhost:8080';

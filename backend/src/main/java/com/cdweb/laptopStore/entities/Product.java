@@ -1,6 +1,8 @@
 package com.cdweb.laptopStore.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -80,4 +82,13 @@ public class Product {
     protected void onUpdate() {
         updatedAt = new java.util.Date();
     }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ProductSpecification> productSpecifications;
+
+    public List<ProductSpecification> getProductSpecifications() {
+        return productSpecifications;
+    }
+
 }

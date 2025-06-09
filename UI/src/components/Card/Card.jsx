@@ -7,11 +7,12 @@ const Card = ({
   description,
   actionArrow,
   height,
-  width
+  width,
+  onClick
 }) => {
   return (
     <div className="flex flex-col p-6">
-      <div className="flex justify-center align-center h-[250px]">
+      <div className="flex justify-center align-center h-[250px] " onClick={onClick}>
         <img
           className={`h-[${height ? height : "220px"}] max-h-[${
             height ? height : "220px"

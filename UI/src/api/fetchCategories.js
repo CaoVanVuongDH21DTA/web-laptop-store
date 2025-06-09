@@ -18,7 +18,7 @@ export const fetchCategoriesCode = async () => {
 
   try {
     const result = await axios.get(url, { headers: getHeaders() });
-    return result.data; // hoặc result.data.categories tùy API
+    return result.data; 
   } catch (e) {
     console.error('Fetch categories error:', e);
   }

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import content from "../../data/content.json";
 import Rating from "../../components/Rating/Rating";
 import ProductColors from "./ProductColors";
 import SvgCreditCard from "../../components/common/SvgCreditCard";
@@ -14,7 +13,6 @@ import _ from "lodash";
 import { getAllProducts } from "../../api/fetchProducts";
 import { addItemToCartAction } from "../../store/actions/cartAction";
 
-// const categories = content?.categories;
 const extraSections = [
   {
     icon: <SvgCreditCard />,

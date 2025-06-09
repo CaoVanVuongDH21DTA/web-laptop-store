@@ -6,12 +6,18 @@ import com.cdweb.laptopStore.entities.Product;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.jpa.repository.Query;
+
 
 public interface ProductService {
 
     public Product addProduct(ProductDto product);
     
     public List<ProductDto> getAllProducts(UUID categoryId, UUID typeId);
+
+    // @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productSpecifications ps LEFT JOIN FETCH ps.specification WHERE p.category.id = :categoryId AND p.categoryType.id = :typeId")
+    // List<Product> findByCategoryIdAndTypeIdWithSpecifications(UUID categoryId, UUID typeId);
+
 
     ProductDto getProductBySlug(String slug);
 

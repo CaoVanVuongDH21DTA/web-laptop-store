@@ -36,8 +36,7 @@ public class Category {
     @JsonManagedReference
     private List<CategoryType> categoryTypes;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CategoryBrand> categoryBrands;
-
 }

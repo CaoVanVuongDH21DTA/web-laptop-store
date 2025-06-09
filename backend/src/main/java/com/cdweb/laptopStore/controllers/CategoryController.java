@@ -1,6 +1,7 @@
 package com.cdweb.laptopStore.controllers;
 
 import com.cdweb.laptopStore.dto.CategoryDto;
+import com.cdweb.laptopStore.dto.CategoryFiltersDto;
 import com.cdweb.laptopStore.entities.Category;
 import com.cdweb.laptopStore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategory());
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable(value = "id",required = true) UUID categoryId){
@@ -55,6 +55,12 @@ public class CategoryController {
         Optional<Category> categoryOpt = categoryService.getCategoryByCode(code.toLowerCase());
         return categoryOpt.map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/filters")
+    public ResponseEntity<CategoryFiltersDto> getCategoryFilters(@PathVariable("id") UUID categoryId) {
+        CategoryFiltersDto filters = categoryService.getFiltersByCategory(categoryId);
+        return ResponseEntity.ok(filters);
     }
 
 }

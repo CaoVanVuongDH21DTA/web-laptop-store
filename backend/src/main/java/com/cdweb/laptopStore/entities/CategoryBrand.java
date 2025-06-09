@@ -31,7 +31,7 @@ public class CategoryBrand {
     private String description;
 
     @Column(nullable = false)
-    private String img_category;
+    private String imgCategory;
 
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)

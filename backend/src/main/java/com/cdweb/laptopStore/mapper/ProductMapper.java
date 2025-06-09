@@ -2,14 +2,14 @@ package com.cdweb.laptopStore.mapper;
 
 import com.cdweb.laptopStore.dto.ProductDto;
 import com.cdweb.laptopStore.dto.ProductResourceDto;
+import com.cdweb.laptopStore.dto.ProductSpecificationDto;
 import com.cdweb.laptopStore.dto.ProductVariantDto;
 import com.cdweb.laptopStore.entities.*;
 import com.cdweb.laptopStore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -98,55 +98,15 @@ public class ProductMapper {
     }
 
     public List<ProductDto> getProductDtos(List<Product> products) {
-        return products.stream().map(this::mapProductToDto).toList();
+        return products.stream().map(this::mapToProductDto).toList();
     }
-
-    public ProductDto mapProductToDto(Product product) {
-        ProductDto.ProductDtoBuilder builder = ProductDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .isNewArrival(product.isNewArrival())
-                .rating(product.getRating())
-                .description(product.getDescription())
-                .slug(product.getSlug())
-                .thumbnail(getProductThumbnail(product.getResources()));
-
-        // Lấy tên thương hiệu từ categoryBrand
-        if (product.getCategoryBrand() != null) {
-            builder 
-                .categoryBrandId(product.getCategoryBrand().getId())
-                .categoryBrandName(product.getCategoryBrand().getName());
-        }
-
-        if (product.getCategory() != null) {
-            builder.categoryId(product.getCategory().getId());
-            builder.categoryName(product.getCategory().getName());
-        }
-
-        if (product.getCategoryType() != null) {
-            builder.categoryTypeId(product.getCategoryType().getId());
-            builder.categoryTypeName(product.getCategoryType().getName());
-        }
-
-        if (product.getProductVariants() != null) {
-            builder.variants(mapProductVariantListToDto(product.getProductVariants()));
-        }
-
-        if (product.getResources() != null) {
-            builder.productResources(mapProductResourcesListDto(product.getResources()));
-        }
-
-        return builder.build();
-    }
-
-
+    
     private String getProductThumbnail(List<Resources> resources) {
         return resources.stream()
             .filter(Resources::getIsPrimary)
             .findFirst()
             .map(Resources::getUrl)   
-            .orElse(null);  
+            .orElse(null);  //trả về ảnh default nếu ko có ảnh của product
     }
 
     public List<ProductVariantDto> mapProductVariantListToDto(List<ProductVariant> productVariants) {
@@ -174,4 +134,74 @@ public class ProductMapper {
                 .type(resources.getType())
                 .build();
     }
+
+    public ProductDto mapToProductDto(Product product) {
+        return ProductDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .categoryBrandId(getCategoryBrandId(product))
+                .categoryBrandName(getCategoryBrandName(product))
+                .isNewArrival(product.isNewArrival())
+                .rating(product.getRating())
+                .categoryId(getCategoryId(product))
+                .thumbnail(getProductThumbnail(product.getResources()))
+                .slug(product.getSlug())
+                .categoryName(getCategoryName(product))
+                .categoryTypeId(getCategoryTypeId(product))
+                .categoryTypeName(getCategoryTypeName(product))
+                .variants(mapProductVariantListToDto(product.getProductVariants()))
+                .productResources(mapProductResourcesListDto(product.getResources()))
+                .specifications(mapToProductSpecifications(product.getProductSpecifications()))
+                .build();
+    }
+
+    // ==== Các phương thức phụ ====
+
+    private UUID getCategoryBrandId(Product product) {
+        return product.getCategoryBrand() != null ? product.getCategoryBrand().getId() : null;
+    }
+
+    private String getCategoryBrandName(Product product) {
+        return product.getCategoryBrand() != null ? product.getCategoryBrand().getName() : null;
+    }
+
+    private UUID getCategoryId(Product product) {
+        return product.getCategory() != null ? product.getCategory().getId() : null;
+    }
+
+    private String getCategoryName(Product product) {
+        return product.getCategory() != null ? product.getCategory().getName() : null;
+    }
+
+    private UUID getCategoryTypeId(Product product) {
+        return product.getCategoryType() != null ? product.getCategoryType().getId() : null;
+    }
+
+    private String getCategoryTypeName(Product product) {
+        return product.getCategoryType() != null ? product.getCategoryType().getName() : null;
+    }
+
+
+    private List<ProductSpecificationDto> mapToProductSpecifications(List<ProductSpecification> productSpecs) {
+        if (productSpecs == null) return new ArrayList<>();
+
+        // Group theo specification name, gom tất cả các value vào Set để loại trùng
+        Map<String, Set<String>> grouped = productSpecs.stream()
+                .filter(ps -> ps.getSpecification() != null && ps.getSpecificationValue() != null)
+                .collect(Collectors.groupingBy(
+                        ps -> ps.getSpecification().getLabel(),
+                        Collectors.mapping(ps -> ps.getSpecificationValue().getValue(), Collectors.toSet()) // Dùng Set loại trùng
+                ));
+
+        // Map sang DTO, nối các value duy nhất thành chuỗi cách nhau bằng dấu phẩy
+        return grouped.entrySet().stream()
+                .map(entry -> ProductSpecificationDto.builder()
+                        .name(entry.getKey())
+                        .value(String.join(", ", entry.getValue())) // sẽ chỉ có các value duy nhất
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }

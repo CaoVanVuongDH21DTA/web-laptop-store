@@ -16,5 +16,5 @@ public class CategoryTypeDto {
     private String name;
     private String code;
     private String description;
-    private String img_category;
+    private String imgCategory;
 }

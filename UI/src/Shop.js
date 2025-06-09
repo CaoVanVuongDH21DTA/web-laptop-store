@@ -17,7 +17,6 @@ const Shop = () => {
     dispatch(setLoading(true));
     fetchCategories()
       .then((res) => {
-        console.log("Fetched categories:", res);
         if (Array.isArray(res) && res.length > 0) {
           dispatch(loadCategories(res));
         } else {
@@ -41,13 +40,20 @@ const Shop = () => {
             ? item.categoryTypes.map((type) => ({
                 title: type.name,
                 description: type.description,
-                img_category: type.img_category,
+                img_category: type.imgCategory,
+                code: type.code,
+                itemType: 'type',
+                parentName: item.name,
               }))
             : item.categoryBrands?.map((brand) => ({
                 title: brand.name,
                 description: brand.description,
-                img_category: brand.img_category,
+                img_category: brand.imgCategory,
+                code: brand.code,
+                itemType: 'brand',
+                parentName: 'Laptop', // Mặc định là Laptop nếu là brand
               }));
+
 
         // Bỏ qua nếu không có types (cả categoryTypes và categoryBrands đều trống)
         if (!types || types.length === 0) return null;

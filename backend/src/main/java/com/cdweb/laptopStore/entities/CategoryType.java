@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,10 +32,14 @@ public class CategoryType {
     private String description;
 
     @Column(nullable = false)
-    private String img_category;
+    private String imgCategory;
 
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)
     @JsonIgnore
     private Category category;
+    
+    @OneToMany(mappedBy = "categoryType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products;
+
 }
