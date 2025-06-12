@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,11 +15,12 @@ import java.util.UUID;
 @Builder
 public class OrderRequest {
     private UUID userId;
-    private Date orderDate;
+    private LocalDateTime orderDate;
     private UUID addressId;
+    private UUID shippingProviderId;
     private List<OrderItemRequest> orderItemRequests;
     private Double totalAmount;
     private Double discount;
     private String paymentMethod;
-    private Date expectedDeliveryDate;
+    private LocalDateTime expectedDeliveryDate;
 }

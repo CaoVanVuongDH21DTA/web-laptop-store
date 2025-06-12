@@ -11,14 +11,24 @@ import java.util.Map;
 
 @Component
 public class PaymentIntentService {
+
+    // Tỷ giá giả định: 1 USD = 25,000 VND
+    private static final double EXCHANGE_RATE_VND_TO_USD = 25000.0;
+
     public Map<String, String> createPaymentIntent(Order order) throws StripeException {
         Map<String, String> metaData = new HashMap<>();
         metaData.put("orderId",order.getId().toString());
+
+        metaData.put("original_amount_vnd", String.valueOf(order.getTotalAmount().longValue())); // lưu số tiền gốc theo VND
+
+        // Convert từ VND sang USD cents (Stripe dùng cents, tức 1 USD = 100)
+        long amountInUsdCents = convertVndToUsdCents(order.getTotalAmount().longValue());
+
         PaymentIntentCreateParams paymentIntentCreateParams= PaymentIntentCreateParams.builder()
-                .setAmount((long) (order.getTotalAmount().longValue()))
-                .setCurrency("vnd")
+                .setAmount(amountInUsdCents)
+                .setCurrency("usd")
                 .putAllMetadata(metaData)
-                .setDescription("Test Payment Project -1")
+                .setDescription("Thanh toán đơn hàng (tương đương " + order.getTotalAmount().longValue() + " VND)")
                 .setAutomaticPaymentMethods(
                         PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
                 )
@@ -27,5 +37,9 @@ public class PaymentIntentService {
         Map<String, String> map = new HashMap<>();
         map.put("client_secret", paymentIntent.getClientSecret());
         return map;
+    }
+
+    private long convertVndToUsdCents(long vndAmount) {
+        return Math.round((vndAmount / EXCHANGE_RATE_VND_TO_USD) * 100);
     }
 }

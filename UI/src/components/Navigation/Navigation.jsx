@@ -6,10 +6,12 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navigation.css";
 import { useSelector } from "react-redux";
 import { countCartItems } from "../../store/features/cart";
+import { selectTotalQuantity } from "../../store/features/cart"; 
 
 const Navigation = ({ variant = "default" }) => {
   const cartLength = useSelector(countCartItems);
   const navigate = useNavigate();
+  const totalQuantity = useSelector(selectTotalQuantity);
 
   return (
     <nav className="flex items-center py-6 px-16 justify-between gap-20 custom-nav">
@@ -96,11 +98,11 @@ const Navigation = ({ variant = "default" }) => {
               </button>
             </li>
             <li>
-              <Link to="/cart-items" className="flex flex-wrap">
+              <Link to="/cart-items" className="flex flex-wrap relative">
                 <CartIcon />
-                {cartLength > 0 && (
-                  <div className="absolute ml-6 inline-flex items-center justify-center h-6 w-6 bg-black text-white rounded-full border-2 text-xs border-white">
-                    {cartLength}
+                {totalQuantity > 0 && (
+                  <div className="absolute ml-6 mt-0 inline-flex items-center justify-center h-5 w-5 bg-black text-white rounded-full border-2 text-xs border-white">
+                    {totalQuantity}
                   </div>
                 )}
               </Link>

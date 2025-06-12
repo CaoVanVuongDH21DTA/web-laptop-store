@@ -31,11 +31,9 @@ const Cart = () => {
 
   const onChangeQuantity = useCallback(
     (value, productId, variantId) => {
-      console.log("Received ", value);
-
       dispatch(
         updateItemToCartAction({
-          productId: productId,
+          productId,
           variant_id: variantId,
           quantity: value,
         })
@@ -73,7 +71,6 @@ const Cart = () => {
   const isLoggedIn = useMemo(() => {
     return isTokenValid();
   }, []);
-  console.log("isLoggedIn ", isLoggedIn, isTokenValid());
 
   return (
     <>
@@ -112,7 +109,7 @@ const Cart = () => {
                       </td>
                       <td>
                         <p className="text-center text-sm text-gray-600">
-                          ${item?.price}
+                          {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.price)}
                         </p>
                       </td>
 
@@ -138,7 +135,7 @@ const Cart = () => {
 
                       <td>
                         <p className="text-center text-sm text-gray-600">
-                          ${item?.subTotal}
+                          {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.subTotal)}
                         </p>
                       </td>
 
@@ -174,13 +171,23 @@ const Cart = () => {
               </div>
               <div className="mr-20 pr-8">
                 <div className="flex gap-8 text-lg">
-                  <p className="w-[120px]">SubTotal</p> <p>${subTotal}</p>
+                  <p className="w-[120px]">SubTotal</p> <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
                 </div>
                 <div className="flex gap-8 text-lg mt-2">
-                  <p className="w-[120px]">Shipping</p> <p>${0}</p>
+                  <p className="w-[120px]">Shipping</p> 
+                    <p>
+                      {/* {subTotal > 0
+                      ? new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND"
+                        }).format(subTotal)
+                      : "Miễn phí"} */}
+
+                      Free Ship
+                  </p>
                 </div>
                 <div className="flex gap-8 text-lg mt-2 font-bold">
-                  <p className="w-[120px]">Grand Total</p> <p>${subTotal}</p>
+                  <p className="w-[120px]">Grand Total</p> <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
                 </div>
                 <hr className="h-[2px] bg-slate-400 mt-2"></hr>
                 {isLoggedIn && (

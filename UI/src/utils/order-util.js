@@ -1,4 +1,4 @@
-export const createOrderRequest = (cartItems,userId,addressId)=>{
+export const createOrderRequest = (cartItems,userId,addressId,shippingProviderId, paymentMethod)=>{
     let request = {};
     request.userId= userId;
     request.addressId = addressId;
@@ -17,11 +17,15 @@ export const createOrderRequest = (cartItems,userId,addressId)=>{
     request.orderItemRequests = orderItems;
     request.totalAmount =  amount?.toFixed(2);
     request.discount = 0;
-    request.paymentMethod= "CARD";
-    request.expectedDeliveryDate = "2024-10-05T21:11:46.202Z";
-    request.currency = "vnd";
-    return request;
+    request.paymentMethod= paymentMethod;
 
+    const deliveryEndDate = new Date();
+    deliveryEndDate.setDate(deliveryEndDate.getDate() + 4);
+    request.expectedDeliveryDate = deliveryEndDate.toISOString();
+
+    request.currency = "vnd";
+    request.shippingProviderId = shippingProviderId;
+    return request;
 }
 
 export const getStepCount = {

@@ -8,6 +8,8 @@ import com.cdweb.laptopStore.dto.OrderItemDetail;
 import com.cdweb.laptopStore.dto.OrderRequest;
 import com.cdweb.laptopStore.entities.*;
 import com.cdweb.laptopStore.repositories.OrderRepository;
+import com.cdweb.laptopStore.repositories.ShippingProviderRepository;
+
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +34,22 @@ public class OrderService {
     @Autowired
     PaymentIntentService paymentIntentService;
 
+    @Autowired
+    private ShippingProviderRepository shippingProviderRepository;
 
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest, Principal principal) throws Exception {
         User user = (User) userDetailsService.loadUserByUsername(principal.getName());
         Address address = user.getAddressList().stream().filter(address1 -> orderRequest.getAddressId().equals(address1.getId())).findFirst().orElseThrow(BadRequestException::new);
 
+        // 🧩 Lấy shipping provider
+        ShippingProvider shippingProvider = shippingProviderRepository.findById(orderRequest.getShippingProviderId())
+                .orElseThrow(() -> new BadRequestException("Invalid shipping provider"));
+
         Order order= Order.builder()
                 .user(user)
                 .address(address)
+                .shippingProvider(shippingProvider)
                 .totalAmount(orderRequest.getTotalAmount())
                 .orderDate(orderRequest.getOrderDate())
                 .discount(orderRequest.getDiscount())
@@ -120,14 +129,12 @@ public class OrderService {
                     .id(order.getId())
                     .orderDate(order.getOrderDate())
                     .orderStatus(order.getOrderStatus())
-                    .shipmentNumber(order.getShipmentTrackingNumber())
                     .address(order.getAddress())
                     .totalAmount(order.getTotalAmount())
                     .orderItemList(getItemDetails(order.getOrderItemList()))
                     .expectedDeliveryDate(order.getExpectedDeliveryDate())
                     .build();
         }).toList();
-
     }
 
     private List<OrderItemDetail> getItemDetails(List<OrderItem> orderItemList) {

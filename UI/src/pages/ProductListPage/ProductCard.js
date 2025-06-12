@@ -1,7 +1,10 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
+import { useDispatch } from "react-redux";
 import { Link } from 'react-router-dom'
 import Rating from '../../components/Rating/Rating';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { addItemToCartAction } from "../../store/actions/cartAction";
+import { toast } from 'react-hot-toast';
 
 const ProductCard = ({
   id,
@@ -14,6 +17,24 @@ const ProductCard = ({
   thumbnail,
   slug
 }) => {
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+
+  const addItemToCart = useCallback(() => {
+      dispatch(
+        addItemToCartAction({
+          productId: id,
+          thumbnail,
+          name: title,
+          variant: null,
+          quantity: 1,
+          subTotal: price,
+          price: price,
+        })
+      );
+      setError("");
+    }, [dispatch, id, thumbnail, title, price]);
+
   return (
     <div className="relative bg-white border rounded-xl shadow-sm p-4 flex flex-col items-center text-center">
       {/* Hình ảnh */}
@@ -45,7 +66,10 @@ const ProductCard = ({
 
       {/* Nút thêm vào giỏ hàng */}
       <button
-        onClick={() => console.log("Thêm vào giỏ hàng")}
+        onClick={() => {
+          addItemToCart();
+          toast.success('Thêm vào giỏ hàng thành công');
+        }}
         className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition"
         aria-label="Thêm vào giỏ hàng"
       >

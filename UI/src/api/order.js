@@ -14,7 +14,6 @@ export const placeOrderAPI = async (data) => {
   }
 };
 
-
 export const confirmPaymentAPI = async (data)=>{
     const url = API_BASE_URL + '/api/order/update-payment';
     try{
@@ -29,3 +28,16 @@ export const confirmPaymentAPI = async (data)=>{
         throw new Error(err);
     }
 }
+
+export const fetchShippingProviders = async () => {
+  const url = API_BASE_URL + '/api/order/shipping-providers';
+  try {
+    const response = await axios(url, {
+      method: "GET",
+      headers: getHeaders()
+    });
+    return response.data; 
+  } catch (err) {
+    throw new Error(err?.message || "Lỗi không xác định");
+  }
+};
