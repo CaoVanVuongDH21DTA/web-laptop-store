@@ -9,17 +9,21 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import ShopApplicationWrapper from './pages/ShopApplicationWrapper';
 import Modal from 'react-modal';
+import { Toaster } from 'react-hot-toast';
 
 Modal.setAppElement('#root');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-    <RouterProvider router={router}>
-      
-        <ShopApplicationWrapper />
-      
-    </RouterProvider>
+        <>
+            <Toaster position="top-right" reverseOrder={false} />
+            <RouterProvider router={router}>
+            
+                <ShopApplicationWrapper />
+            
+            </RouterProvider>
+        </>
     </Provider>
 );
 

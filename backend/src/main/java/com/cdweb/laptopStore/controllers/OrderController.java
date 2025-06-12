@@ -3,6 +3,8 @@ package com.cdweb.laptopStore.controllers;
 import com.cdweb.laptopStore.auth.dto.OrderResponse;
 import com.cdweb.laptopStore.dto.OrderDetails;
 import com.cdweb.laptopStore.dto.OrderRequest;
+import com.cdweb.laptopStore.dto.ShippingProviderDTO;
+import com.cdweb.laptopStore.repositories.ShippingProviderRepository;
 import com.cdweb.laptopStore.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/order")
@@ -21,6 +24,9 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    private ShippingProviderRepository shippingProviderRepository;
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, Principal principal) throws Exception {
@@ -46,6 +52,13 @@ public class OrderController {
     public ResponseEntity<List<OrderDetails>> getOrderByUser(Principal principal) {
         List<OrderDetails> orders = orderService.getOrdersByUser(principal.getName());
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/shipping-providers")
+    public List<ShippingProviderDTO> getAll() {
+        return shippingProviderRepository.findAll().stream()
+            .map(sp -> new ShippingProviderDTO(sp.getId(), sp.getName(), sp.getImgShip() , sp.getTrackingUrlTemplate()))
+            .collect(Collectors.toList());
     }
 
 }

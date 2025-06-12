@@ -5,7 +5,7 @@ import com.cdweb.laptopStore.auth.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class Order {
     private UUID id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
@@ -35,6 +35,12 @@ public class Order {
     @JsonIgnore
     private Address address;
 
+    @ManyToOne
+    @JoinColumn(name = "shipping_provider_id",nullable = false)
+    @ToString.Exclude
+    @JsonIgnore
+    private ShippingProvider shippingProvider;
+
     @Column(nullable = false)
     private Double totalAmount;
 
@@ -46,11 +52,8 @@ public class Order {
     private String paymentMethod;
 
     @Column(nullable = true)
-    private String shipmentTrackingNumber;
-
-    @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date expectedDeliveryDate;
+    private LocalDateTime expectedDeliveryDate;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "order",cascade = CascadeType.ALL)
     @ToString.Exclude

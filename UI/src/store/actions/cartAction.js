@@ -1,15 +1,16 @@
 import { addToCart, deleteCart, removeFromCart, updateQuantity } from "../features/cart"
 
-export const addItemToCartAction = (productItem)=>{
-    return (dispatch,state) =>{
-        dispatch(addToCart(productItem));
-        updateLocalStorage(state);
-    }
-}
+export const addItemToCartAction = (productItem) => {
+  return (dispatch, getState) => {
+    dispatch(addToCart(productItem));
+    updateLocalStorage(getState);
+  };
+};
 
 export const updateItemToCartAction = (productItem) =>{
     return (dispatch,state) =>{
         dispatch(updateQuantity({
+            productId: productItem?.productId,
             variant_id: productItem?.variant_id,
             quantity: productItem?.quantity
         }))
@@ -25,14 +26,10 @@ export const delteItemFromCartAction = (payload)=>{
     }
 }
 
-const updateLocalStorage = (state) => {
-    const fullState = state(); // <-- Đây là toàn bộ redux state
-    console.log("STATE in updateLocalStorage", fullState);
-    
-    const { cartState } = fullState;
-    console.log("Cart inside cartState: ", cartState?.cart);
-
-    localStorage.setItem('cart', JSON.stringify(cartState?.cart));
+const updateLocalStorage = (getState) => {
+  const fullState = getState(); // lấy toàn bộ redux state
+  const { cartState } = fullState;
+  localStorage.setItem('cart', JSON.stringify(cartState.cart));
 };
 
 export const clearCart = ()=>{

@@ -213,7 +213,7 @@ const ProductListPage = () => {
           </div>
 
           <button
-            className="mt-4 text-blue-500 underline"
+            className="w-full mt-4 text-right"
             onClick={() =>
               setFilters({
                 price: { min: priceRange.min, max: priceRange.max },
@@ -223,7 +223,7 @@ const ProductListPage = () => {
               })
             }
           >
-            Đặt lại bộ lọc
+            Xóa bộ lọc
           </button>
 
 

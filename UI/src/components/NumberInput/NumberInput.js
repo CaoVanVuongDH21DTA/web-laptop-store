@@ -1,25 +1,9 @@
 import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast';
 
 export const NumberInput = ({quantity,max=1,min=1,onChangeQuantity}) => {
 
   const [value,setValue] = useState(quantity ?? 1);
-  const [message,setMessage]= useState('');
-
-  const displayMaxStock = useCallback(()=>{
-    setMessage("Sorry, we have limited quantity available for this product");
-
-    setTimeout(()=>{
-        setMessage('')
-    },2000);
-  },[]);
-
-  const displayMinQuantity = useCallback(()=>{
-    setMessage(`Atleat ${min} item should be required`);
-
-    setTimeout(()=>{
-        setMessage('')
-    },2000);
-  },[min]);
 
   const onIncreaseQuantity = useCallback(()=>{
     if(value < max){
@@ -28,20 +12,25 @@ export const NumberInput = ({quantity,max=1,min=1,onChangeQuantity}) => {
       onChangeQuantity && onChangeQuantity(newVlaue);
      }
      else{
-      displayMaxStock()
-     }
-  },[displayMaxStock, max, onChangeQuantity, value]);
+      toast('⚠️ Xin lỗi, đây là số lượng sản phẩm cuối cùng của chúng tôi', {
+        duration: 3000,
+      });
 
-  const onReduceQuantity = useCallback(()=>{
-    if(value >min){
-      const newVlaue = value -1;
-      setValue(newVlaue);
-      onChangeQuantity && onChangeQuantity(newVlaue);
-  }
-  else{
-      displayMinQuantity()
-  }
-  },[displayMinQuantity, min, onChangeQuantity, value]);
+     }
+  },[max, onChangeQuantity, value]);
+
+  const onReduceQuantity = useCallback(() => {
+    if (value > min) {
+      const newValue = value - 1;
+      setValue(newValue);
+      onChangeQuantity && onChangeQuantity(newValue);
+    } else {
+      toast.error('Bạn có muốn xóa sản phẩm này?', {
+        duration: 3000, // 3 giây
+      });
+    }
+  }, [value, min, onChangeQuantity]);
+
   return (
     <>
     <div className="flex justify-center items-center">
@@ -64,7 +53,6 @@ export const NumberInput = ({quantity,max=1,min=1,onChangeQuantity}) => {
         </button>
         
     </div>
-    {message && <p className='text-sm text-center pt-2 text-red-600'>{message}</p>}
     </>
   )
 }

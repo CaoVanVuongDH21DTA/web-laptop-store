@@ -132,7 +132,9 @@ const ProductDetails = () => {
           <p className="text-3xl pt-4">{product?.name}</p>
           <Rating rating={product?.rating} />
           {/* Price Tag */}
-          <p className="text-xl bold py-2">${product?.price}</p>
+          <p className="text-xl font-bold py-2">
+            {product?.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+          </p>
           <div>
             <p className="text-lg bold">Colors Available</p>
             <ProductColors colors={colors} />
@@ -164,7 +166,6 @@ const ProductDetails = () => {
           </div>
           {error && <p className="text-lg text-red-600">{error}</p>}
           <div className="grid md:grid-cols-2 gap-4 pt-4">
-            {/*  */}
             {extraSections?.map((section, index) => (
               <div key={index} className="flex items-center">
                 {section?.icon}

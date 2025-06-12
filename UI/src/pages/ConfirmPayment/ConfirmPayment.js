@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../store/features/common';
 import { clearCart } from '../../store/features/cart';
 import { confirmPaymentAPI } from '../../api/order';
-// import Spinner from '../components/Spinner';
+import { toast } from 'react-hot-toast';
 
 const ConfirmPayment = () => {
   const location = useLocation();
@@ -28,12 +28,12 @@ const ConfirmPayment = () => {
           dispatch(clearCart());
           navigate('/orderConfirmed');
         } catch (err) {
-          setErrorMsg('Xác nhận thanh toán thất bại.');
+          toast.error('Xác nhận thanh toán thất bại.');
         } finally {
           dispatch(setLoading(false));
         }
       } else {
-        setErrorMsg(`Thanh toán không thành công: ${status}`);
+        toast.error(`Thanh toán không thành công: ${status}`);
       }
     }
     handleRedirect();

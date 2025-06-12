@@ -18,7 +18,6 @@ import Profile from "./pages/Account/Profile";
 import Orders from "./pages/Account/Orders";
 import Settings from "./pages/Account/Settings";
 import { AdminPanel } from "./pages/AdminPanel/AdminPanel";
-import PaymentPage from "./pages/PaymentPage/PaymentPage";
 
 export const router = createBrowserRouter([
     {
@@ -33,19 +32,6 @@ export const router = createBrowserRouter([
           path: "/:categorySlug",
           element: <ProductListPage />,
         },
-
-        // {
-        //     path:"/laptop",
-        //     element:<ProductListPage categoryType={'LAPTOP'}/>,
-        // },
-        // {
-        //     path:"/linh-kien",
-        //     element:<ProductListPage categoryType={'LINHKIEN'}/>,
-        // },
-        // {
-        //   path:"/phu-kien",
-        //   element:<ProductListPage categoryType={'PHUKIEN'}/>,
-        // },
         {
           path:"/product/:slug",
           loader: loadProductBySlug,
