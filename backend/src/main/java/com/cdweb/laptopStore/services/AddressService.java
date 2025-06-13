@@ -37,4 +37,26 @@ public class AddressService {
     public void deleteAddress(UUID id) {
         addressRepository.deleteById(id);
     }
+
+    public Address updateAddress(UUID id, AddressRequest addressRequest, Principal principal) {
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        // Kiểm tra quyền sở hữu nếu cần
+        if (!address.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized to update this address");
+        }
+
+        address.setName(addressRequest.getName());
+        address.setStreet(addressRequest.getStreet());
+        address.setCity(addressRequest.getCity());
+        address.setState(addressRequest.getState());
+        address.setZipCode(addressRequest.getZipCode());
+        address.setPhoneNumber(addressRequest.getPhoneNumber());
+
+        return addressRepository.save(address);
+    }
+
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import { colorSelector } from '../../components/Filters/ColorsFilter';
 
 const ProductColors = ({colors}) => {
-    console.log("colors ",colors);
   return (
     <div className='flex pt-2'>
         {colors?.map((color,index)=>(

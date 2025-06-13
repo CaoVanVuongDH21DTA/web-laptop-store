@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from "react";
-import { logOut } from "../../utils/jwt-helper";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../store/features/common";
@@ -24,7 +23,6 @@ const Account = () => {
       });
   }, []);
 
- 
   return (
     <div className="p-8">
         {isUserAdmin && <div className="text-right"><Link to={"/admin"} className="text-lg text-blue-900 underline">Manage Admin</Link></div>}

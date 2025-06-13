@@ -26,6 +26,19 @@ export const userSlice = createSlice({
                 }
             }
         },
+        updateAddress: (state, action) => {
+            const updatedAddress = action.payload;
+            const updatedList = state?.userInfo?.addressList?.map((addr) =>
+                addr.id === updatedAddress.id ? updatedAddress : addr
+            );
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    addressList: updatedList,
+                },
+            };
+        },
         removeAddress:(state,action)=>{
             return {
                 ...state,
@@ -58,7 +71,7 @@ export const userSlice = createSlice({
     }
 });
 
-export const { loadUserInfo, saveAddress, removeAddress, loadOrders, cancelOrder } = userSlice?.actions;
+export const { loadUserInfo, saveAddress, removeAddress, loadOrders, cancelOrder, updateAddress } = userSlice?.actions;
 
 export const selectUserInfo = (state) => state?.userState?.userInfo ?? {};
 export const selectAllOrders = (state) => state?.userState?.orders ?? [];

@@ -1,80 +1,151 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeAddress, selectUserInfo } from "../../store/features/user";
-import AddAddress from "./AddAddress";
 import { setLoading } from "../../store/features/common";
 import { deleteAddressAPI } from "../../api/userInfo";
+import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+import EditProfile from "./Profile/EditProfile";
+import AddAddress from "./Address/AddAddress";
+import EditAddress from "./Address/EditAddress"
 
 const Profile = () => {
   const userInfo = useSelector(selectUserInfo);
-  const [addAddress, setAddAddress] = useState(false);
+  const [addAddressVisible, setAddAddressVisible] = useState(false);
   const dispatch = useDispatch();
+  const [editProfileVisible, setEditProfileVisible] = useState(false);
+  const [editAddressVisible, setEditAddressVisible] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const onDeleteAddress = useCallback((id)=>{
-      dispatch(setLoading(true));
-      deleteAddressAPI(id).then(res=>{
+  const onDeleteAddress = useCallback((id) => {
+    dispatch(setLoading(true));
+    deleteAddressAPI(id)
+      .then(() => {
         dispatch(removeAddress(id));
-      }).catch(err=>{
-
-      }).finally(()=>{
-        dispatch(setLoading(false));
+        toast.success("Xoá địa chỉ thành công");
       })
-  },[dispatch]);
+      .catch((err) => {
+        toast.error("Xoá thất bại");
+        console.error("Delete failed", err);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }, [dispatch]);
 
   return (
-    <div>
-      <h1 className="text-2xl">My Info</h1>
-      {!addAddress && (
-        <div>
-          <div className="flex gap-2">
-            <h2 className="text-xl pt-4">Contact Details</h2>
-            <button className="underline text-blue-900 mt-4">Edit</button>
-          </div>
-          <div className="pt-4">
-            <p className="text-gray-700 py-2 font-bold">Full Name</p>
-            <p>
-              {userInfo?.firstName} {userInfo?.lastName}
-            </p>
-            <p className="text-gray-700 py-2 font-bold">Phone Number</p>
-            <p>{userInfo?.phoneNumber ?? "None"}</p>
-            <p className="text-gray-700 py-2 font-bold">Email</p>
-            <p>{userInfo?.email}</p>
-          </div>
-          {/* Addresses */}
-          <div className="pt-4">
-            <div className="flex gap-12">
-              <h3 className="text-lg font-bold">Address</h3>
-              <button className="underline text-blue-900" onClick={()=> setAddAddress(true)}>Add New</button>
-            </div>
+    <motion.div
+      className="max-w-5xl mx-auto px-4 pb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <h1 className="text-3xl font-bold mb-6">My Profile</h1>
 
-            <div className="pt-4 grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 gap-8 pb-10 mb-8">
-              {userInfo?.addressList?.map((address, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="bg-gray-200 border rounded-lg p-4"
-                  >
-                    <p className="py-2 font-bold">{address?.name}</p>
-                    <p className="pb-2">{address?.phoneNumber}</p>
-                    <p className="pb-2">
-                      {address?.street},{address?.city},{address?.state}
-                    </p>
-                    <p>{address?.zipCode}</p>
-                    <div className="flex gap-2">
-                      <button className="underline text-blue-900">Edit</button>
-                      <button onClick={()=> onDeleteAddress(address?.id)} className="underline text-blue-900">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+      {/* Profile header + Edit */}
+      <div className="relative flex items-center gap-6 mb-8 bg-white p-4 rounded-lg shadow">
+        <button
+          className="absolute top-4 right-4 text-sm text-blue-600 hover:underline"
+          onClick={() => setEditProfileVisible(true)}
+        >
+          Edit
+        </button>
+        <img 
+          alt={userInfo.email}
+          className="w-36 h-36 rounded-full object-cover mb-2"
+          src={userInfo?.avatarUrl || "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg?semt=ais_hybrid&w=740"}/>
+        <div>
+          <p className="text-xl font-semibold">{userInfo?.firstName} {userInfo?.lastName}</p>
+          <p className="text-gray-600">{userInfo?.email}</p>
+          <p className="text-gray-600">{userInfo?.phoneNumber ?? "None"}</p>
         </div>
+      </div>
+
+      {/* ... Phần address và AddAddress giữ nguyên */}
+
+      {/* Modal Edit Profile */}
+      {editProfileVisible && (
+        <EditProfile onClose={() => setEditProfileVisible(false)} />
       )}
-      {addAddress && <AddAddress onCancel={()=> setAddAddress(false)}/>}
-    </div>
+
+      {/* Address Section */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Addresses</h2>
+          <button
+            className="text-blue-600 hover:underline"
+            onClick={() => setAddAddressVisible(true)}
+          >
+            + Add New Address
+          </button>
+        </div>
+
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {userInfo?.addressList?.length > 0 ? (
+            userInfo.addressList.map((address, index) => (
+              <motion.div
+                key={index}
+                className="bg-white border rounded-lg p-4 shadow hover:shadow-md transition"
+                whileHover={{ scale: 1.02 }}
+              >
+                <p className="font-bold">{address?.name}</p>
+                <p>{address?.phoneNumber}</p>
+                <p className="text-sm text-gray-700">{`${address?.street}, ${address?.city}, ${address?.state}`}</p>
+                <p className="text-sm text-gray-600">{address?.zipCode}</p>
+                <div className="flex justify-end gap-4 mt-2 text-sm">
+                  <button
+                    onClick={() => {
+                      setSelectedAddress(address);
+                      setEditAddressVisible(true);
+                    }}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => onDeleteAddress(address?.id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full text-center">
+              Bạn chưa thêm địa chỉ, vui lòng thêm địa chỉ cụ thể của bạn.
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Modal */}
+      {addAddressVisible && (
+        <AddAddress
+          onCancel={(success) => {
+            setAddAddressVisible(false);
+            if (!success) {
+              toast("Bạn chưa thêm address");
+            }
+          }}
+        />
+      )}
+
+      {editAddressVisible && selectedAddress && (
+        <EditAddress
+          address={selectedAddress}
+          onCancel={(success) => {
+            setEditAddressVisible(false);
+            setSelectedAddress(null);
+            if (!success) {
+              toast("Bạn chưa cập nhật address");
+            }
+          }}
+        />
+      )}
+
+    </motion.div>
   );
 };
 

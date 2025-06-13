@@ -1,6 +1,4 @@
 import React, { useMemo } from 'react'
-import SvgStarIcon from '../common/SvgStarIcon';
-import { SvgEmptyStar } from '../common/SvgEmptyStar';
 
 const Star = ({ fillPercent = 0 }) => {
   return (

@@ -28,6 +28,7 @@ const Navigation = ({ variant = "default" }) => {
             <li>
               <NavLink
                 to="/"
+                id="menu"
                 className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Trang Chủ
@@ -36,6 +37,7 @@ const Navigation = ({ variant = "default" }) => {
             <li>
               <NavLink
                 to="/laptop"
+                id="menu"
                 className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Laptop
@@ -44,6 +46,7 @@ const Navigation = ({ variant = "default" }) => {
             <li>
               <NavLink
                 to="/linh-kien"
+                id="menu"
                 className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Linh Kiện Laptop
@@ -52,6 +55,7 @@ const Navigation = ({ variant = "default" }) => {
             <li>
               <NavLink
                 to="/phu-kien"
+                id="menu"
                 className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Phụ Kiện Laptop

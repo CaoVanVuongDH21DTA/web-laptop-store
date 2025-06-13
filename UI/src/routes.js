@@ -20,6 +20,7 @@ import Settings from "./pages/Account/Settings";
 import { AdminPanel } from "./pages/AdminPanel/AdminPanel";
 
 export const router = createBrowserRouter([
+    //trang người dùng load sản phẩm
     {
       path: "/",
       element: <ShopApplicationWrapper />,
@@ -69,6 +70,7 @@ export const router = createBrowserRouter([
          }
       ]
     },
+    //trang auth
     {
       path:"/v1/",
       element:<AuthenticationWrapper />,
@@ -87,10 +89,12 @@ export const router = createBrowserRouter([
       path:'/oauth2/callback',
       element:<OAuth2LoginCallback />
     },
+
     {
       path:'/confirmPayment',
       element:<ConfirmPayment />
     },
+    //trang admin quản lý 
     {
       path:'/admin/*',
       element:<ProtectedRoute><AdminPanel /></ProtectedRoute>

@@ -24,6 +24,8 @@ public class User implements UserDetails {
     @GeneratedValue
     private UUID id;
 
+    private String avatarUrl;
+
     private String firstName;
 
     private String lastName;
