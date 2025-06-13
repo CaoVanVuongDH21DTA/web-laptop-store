@@ -36,7 +36,6 @@ public class AuthController {
     @Autowired
     JWTTokenHelper jwtTokenHelper;
 
-
     @PostMapping("/login")
     public ResponseEntity<UserToken> login(@RequestBody LoginRequest loginRequest){
         try{

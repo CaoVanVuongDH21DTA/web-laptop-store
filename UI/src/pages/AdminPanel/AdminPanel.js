@@ -22,7 +22,6 @@ const dataProvider = withLifecycleCallbacks(simpleRestProvider('http://localhost
   {
     resource:"products",
     beforeSave: async (params,dataProvider) =>{
-      console.log("Params ",params);
       let requestBody = {
         ...params
       }
@@ -47,12 +46,10 @@ const dataProvider = withLifecycleCallbacks(simpleRestProvider('http://localhost
           url:CDN_URL+"/"+fileName,
         };
       }));
-      //console.log("Params ",params,fileName);
       const request = {
         ...requestBody,
         productResources:newProductResList
       }
-      console.log("Request Body ",request);
       return request;
     }
   }

@@ -15,6 +15,22 @@ export const fetchUserDetails = async ()=>{
     }
 }
 
+export const updateUserDetails = async (formData) => {
+  const url = API_BASE_URL + '/api/user/profile';
+  try {
+    const response = await axios.put(url, formData, {
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'multipart/form-data', 
+      },
+    });
+    return response?.data;
+  } catch (err) {
+    console.error("Update failed", err);
+    throw err;
+  }
+};
+
 export const addAddressAPI = async (data)=>{
     const url = API_BASE_URL + '/api/address';
     try{
@@ -43,6 +59,20 @@ export const deleteAddressAPI = async (id)=>{
         throw new Error(err);
     }
 }
+
+export const updateAddressAPI = async (id, data) => {
+  const url = API_BASE_URL + `/api/address/${id}`;
+  try {
+    const response = await axios.put(url, data, {
+      headers: getHeaders()
+    });
+    return response?.data;
+  } catch (err) {
+    console.error("Update failed", err);
+    throw err;
+  }
+};
+
 
 export const fetchOrderAPI = async ()=>{
     const url = API_BASE_URL + `/api/order/user`;

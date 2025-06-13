@@ -28,7 +28,6 @@ const CheckoutForm = ({ userId, addressId , shippingPartner, paymentMethod}) => 
     setOrderResponse(null);
 
     const orderRequest = createOrderRequest(cartItems, userId, addressId, shippingPartner, paymentMethod);
-    console.log('Order Request', orderRequest);
 
     // Submit Stripe form fields (e.g. Card Element)
     const { error: stripeError } = await elements.submit();
@@ -41,7 +40,6 @@ const CheckoutForm = ({ userId, addressId , shippingPartner, paymentMethod}) => 
     try {
       // 1. Create order on server
       const res = await placeOrderAPI(orderRequest);
-      console.log("res: " + res)
       const clientSecret = res?.credentials?.client_secret;
       setOrderResponse(res);
 
@@ -58,8 +56,6 @@ const CheckoutForm = ({ userId, addressId , shippingPartner, paymentMethod}) => 
         },
         redirect: 'if_required'
       });
-
-      console.log("Stripe Payment Result", paymentResult);
 
       if (paymentResult?.error) {
         throw new Error(paymentResult.error.message);
