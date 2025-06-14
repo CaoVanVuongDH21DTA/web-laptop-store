@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,4 +90,11 @@ public class ProductServiceImpl implements ProductService{
     public Product fetchProductById(UUID id) throws Exception {
         return productRepository.findById(id).orElseThrow(BadRequestException::new);
     }
+
+    @Override   
+    public List<ProductDto> searchProductsByName(String keyword) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        return productMapper.getProductDtos(products);
+    }
+
 }

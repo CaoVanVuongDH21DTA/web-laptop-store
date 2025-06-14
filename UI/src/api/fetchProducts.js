@@ -24,3 +24,14 @@ export const getProductBySlug = async (slug) => {
   const result = await axios.get(url);
   return result?.data?.[0]; // Nếu API trả về mảng
 };
+
+export const getProductBySearch = async (searchTerm) => {
+  try {
+    const url = API_BASE_URL + API_URLS.GET_PRODUCTS + `?search=${encodeURIComponent(searchTerm)}`;
+    const result = await axios.get(url);
+    return result?.data; // Trả về mảng sản phẩm
+  } catch (err) {
+    console.error("Lỗi khi gọi API getProductBySearch:", err);
+    return []; // Trả về mảng rỗng nếu có lỗi
+  }
+};

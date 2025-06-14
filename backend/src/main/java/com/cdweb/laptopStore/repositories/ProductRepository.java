@@ -1,9 +1,7 @@
 package com.cdweb.laptopStore.repositories;
 
-import com.cdweb.laptopStore.entities.CategoryBrand;
 import com.cdweb.laptopStore.entities.Product;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     List<Product> findAllByCategoryId(UUID categoryId);
 
     Product findBySlug(String slug);
+
+    List<Product> findByNameContainingIgnoreCase(String keyword);
     
     @Query("SELECT p FROM Product p " +
         "LEFT JOIN FETCH p.productSpecifications ps " +

@@ -23,11 +23,6 @@ public class CloudinaryService {
         @Value("${API_KEY}") String apiKey,
         @Value("${API_SECRET}") String apiSecret
     ) {
-        System.out.println("🚀 Initializing Cloudinary with:");
-        System.out.println("   CLOUD_NAME: " + cloudName);
-        System.out.println("   API_KEY: " + apiKey);
-        System.out.println("   API_SECRET: " + apiSecret);
-        
         this.cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,

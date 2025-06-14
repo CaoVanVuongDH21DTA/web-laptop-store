@@ -28,6 +28,7 @@ public class ProductController {
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) UUID typeId,
             @RequestParam(required = false) String slug,
+            @RequestParam(required = false) String search,
             HttpServletResponse response
     ) {
         List<ProductDto> productList = new ArrayList<>();
@@ -35,6 +36,8 @@ public class ProductController {
         if (StringUtils.isNotBlank(slug)) {
             ProductDto productDto = productService.getProductBySlug(slug);
             if (productDto != null) productList.add(productDto);
+        }else if (StringUtils.isNotBlank(search)) {
+            productList = productService.searchProductsByName(search);
         } else {
             productList = productService.getAllProducts(categoryId, typeId);
         }
