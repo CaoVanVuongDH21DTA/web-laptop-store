@@ -36,35 +36,30 @@ const ProductCard = ({
     }, [dispatch, id, thumbnail, title, price]);
 
   return (
-    <div className="relative bg-white border rounded-xl shadow-sm p-4 flex flex-col items-center text-center">
-      {/* Hình ảnh */}
+    <div className="relative bg-white border rounded-xl shadow-sm p-4 flex flex-col items-center text-center hover:shadow-md transition">
       <Link to={`/product/${slug}`} className="block w-full">
-        <img
-          className="h-[250px] w-full object-contain rounded-lg transition-transform duration-300 ease-in-out hover:scale-105"
-          src={thumbnail}
-          alt={title}
-        />
+        <div className="w-full h-[220px] bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+          <img
+            src={thumbnail}
+            alt={title}
+            className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out hover:scale-105"
+          />
+        </div>
       </Link>
 
-      {/* Nội dung */}
       <div className="mt-4 px-2 w-full text-left">
-        <h3 className="text-[15px] font-semibold text-gray-800">{title}</h3>
-
+        <h3 className="text-[15px] font-semibold text-gray-800 line-clamp-2">{title}</h3>
         <p className="text-sm text-gray-500 mt-2 line-clamp-2">{description}</p>
-        <div className='flex justify-between '>
-          <p className="text-[15px] font-semibold text-gray-800 mt-1">
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-[15px] font-semibold text-gray-800">
             {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(price)}
           </p>
-
-          {/* Rating luôn hiển thị */}
-          <div className="mt-1 flex justify-center">
+          <div className="flex">
             <Rating rating={rating} />
           </div>
         </div>
-
       </div>
 
-      {/* Nút thêm vào giỏ hàng */}
       <button
         onClick={() => {
           addItemToCart();
@@ -76,6 +71,7 @@ const ProductCard = ({
         <AddShoppingCartIcon />
       </button>
     </div>
+
   );
 };
 

@@ -125,31 +125,46 @@ const Orders = () => {
                       className='mt-4 overflow-hidden'
                     >
                       {order.items.map((item, idx) => (
-                        <div key={idx} className='flex gap-4 items-center mb-4'>
+                        <div
+                          key={idx}
+                          className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center mb-4"
+                        >
                           <img
                             src={item.url}
                             alt={item.name}
-                            className='w-[100px] h-[100px] object-cover rounded border'
+                            className="w-24 h-24 object-cover rounded border"
                           />
-                          <div className='text-sm text-gray-700'>
-                            <p className='text-[18px]'>{item.name}</p>
+                          <div className="text-sm text-gray-700 flex-1">
+                            <p className="text-base font-medium">{item.name}</p>
                             <p>Quantity: {item.quantity}</p>
-                            <p>Price: {item.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                            <p>
+                              Price:{' '}
+                              {item.price?.toLocaleString('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                              })}
+                            </p>
                           </div>
                         </div>
                       ))}
 
-                      <div className='flex justify-between items-center mt-2 mb-4 text-sm font-semibold'>
-                        <p>Total: {order.totalAmount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-2 mb-4 text-sm font-semibold gap-2">
+                        <p>
+                          Total:{' '}
+                          {order.totalAmount?.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })}
+                        </p>
                       </div>
 
                       {order.orderStatus !== 'CANCELLED' && (
-                        <div className='space-y-4'>
+                        <div className="space-y-4">
                           <Timeline stepCount={getStepCount[order.orderStatus]} />
                           {getStepCount[order.orderStatus] <= 2 && (
                             <button
                               onClick={() => onCancelOrder(order.id)}
-                              className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition'
+                              className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition w-full sm:w-auto"
                             >
                               Cancel Order
                             </button>

@@ -43,7 +43,7 @@ const Profile = () => {
       <h1 className="text-3xl font-bold mb-6">My Profile</h1>
 
       {/* Profile header + Edit */}
-      <div className="relative flex items-center gap-6 mb-8 bg-white p-4 rounded-lg shadow">
+      <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-8 bg-white p-4 rounded-lg shadow">
         <button
           className="absolute top-4 right-4 text-sm text-blue-600 hover:underline"
           onClick={() => setEditProfileVisible(true)}
@@ -52,16 +52,15 @@ const Profile = () => {
         </button>
         <img 
           alt={userInfo.email}
-          className="w-36 h-36 rounded-full object-cover mb-2"
-          src={userInfo?.avatarUrl || "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg?semt=ais_hybrid&w=740"}/>
-        <div>
-          <p className="text-xl font-semibold">{userInfo?.firstName} {userInfo?.lastName}</p>
-          <p className="text-gray-600">{userInfo?.email}</p>
-          <p className="text-gray-600">{userInfo?.phoneNumber ?? "None"}</p>
+          className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover mb-2 sm:mb-0"
+          src={userInfo?.avatarUrl || "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg?semt=ais_hybrid&w=740"}
+        />
+        <div className="text-center sm:text-left">
+          <p className="text-lg sm:text-xl font-semibold">{userInfo?.firstName} {userInfo?.lastName}</p>
+          <p className="text-gray-600 text-sm sm:text-base">{userInfo?.email}</p>
+          <p className="text-gray-600 text-sm sm:text-base">{userInfo?.phoneNumber ?? "None"}</p>
         </div>
       </div>
-
-      {/* ... Phần address và AddAddress giữ nguyên */}
 
       {/* Modal Edit Profile */}
       {editProfileVisible && (
@@ -80,7 +79,7 @@ const Profile = () => {
           </button>
         </div>
 
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
           {userInfo?.addressList?.length > 0 ? (
             userInfo.addressList.map((address, index) => (
               <motion.div

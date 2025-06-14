@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo } from "../../../store/features/user";
 import { toast } from "react-hot-toast";
 import {updateUserDetails} from "../../../api/userInfo" 
+import { setLoading } from "../../../store/features/common";
 
 const EditProfile = ({ onClose }) => {
   const userInfo = useSelector(selectUserInfo);
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     firstName: userInfo?.firstName || "",
@@ -46,7 +48,8 @@ const EditProfile = ({ onClose }) => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-
+    
+    dispatch(setLoading(true));
     const data = new FormData();
     data.append("firstName", formData.firstName);
     data.append("lastName", formData.lastName);
@@ -65,6 +68,8 @@ const EditProfile = ({ onClose }) => {
       onClose(true);
     } catch (error) {
       toast.error("Cập nhật thất bại!");
+    }finally {
+      dispatch(setLoading(false))
     }
     onClose(true);
   };

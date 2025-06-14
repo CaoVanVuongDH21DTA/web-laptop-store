@@ -15,13 +15,11 @@ const Category = ({ title, data }) => {
   };
 
   const handleClickCategoryType = (item) => {
-    let parentSlug = "laptop"; // default
+    let parentSlug = "laptop";
     if (item.itemType === "type") {
-      // Nếu là categoryType, thì map theo parentName
       const normalizedParent = normalize(item.parentName);
       parentSlug = parentToSlugMap[normalizedParent] || "laptop";
     } else if (item.itemType === "brand") {
-      // Nếu là categoryBrand, thì luôn đi về laptop
       parentSlug = "laptop";
     }
 
@@ -29,7 +27,7 @@ const Category = ({ title, data }) => {
       state: {
         autoFilter: {
           filterKey: item.itemType === "type" ? "type" : "brand",
-          filterValue: item.title, // Ưu tiên code
+          filterValue: item.title,
         },
       },
     });
@@ -38,22 +36,20 @@ const Category = ({ title, data }) => {
   return (
     <>
       <SectionHeading title={title} />
-      <div className="flex items-center px-8 flex-wrap">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 md:px-8">
         {data &&
-          data?.map((item, index) => {
-            return (
-              <Card
-                key={index}
-                title={item?.title}
-                description={item?.description}
-                imagePath={item?.img_category}
-                actionArrow={true}
-                height={"240px"}
-                width={"200px"}
-                onClick={() => handleClickCategoryType(item)}
-              />
-            );
-          })}
+          data.map((item, index) => (
+            <Card
+              key={index}
+              title={item?.title}
+              description={item?.description}
+              imagePath={item?.img_category}
+              actionArrow={true}
+              height={"200px"}
+              width={"100%"}
+              onClick={() => handleClickCategoryType(item)}
+            />
+          ))}
       </div>
     </>
   );

@@ -11,29 +11,22 @@ const Card = ({
   onClick
 }) => {
   return (
-    <div className="flex flex-col p-6">
-      <div className="flex justify-center align-center h-[250px] " onClick={onClick}>
+    <div className="flex flex-col p-3 sm:p-4 md:p-6">
+      <div className="flex justify-center items-center h-[200px] cursor-pointer" onClick={onClick}>
         <img
-          className={`h-[${height ? height : "220px"}] max-h-[${
-            height ? height : "220px"
-          }] w-[${width ? width : "200px"}] max-w-[${width ? width : "220px"}]
-         border rounded-lg hover:scale-105 cursor-pointer`}
-          width={width ?? "200px"}
-          height={height ?? "220px"}
+          className="object-contain rounded-lg hover:scale-105 transition duration-200 w-full max-w-[160px] sm:max-w-[180px] md:max-w-[200px] h-auto"
           src={imagePath}
           alt={title}
           style={{
-            mixBlendMode: "color-burn",
-            objectFit: "contain",
-            border: "none",
+            maxHeight: height || "200px",
           }}
         />
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-2">
         <div className="flex flex-col">
-          <p className="text-[16px] p-1">{title}</p>
+          <p className="text-base sm:text-lg font-medium p-1">{title}</p>
           {description && (
-            <p className="text-[12px] px-1 text-gray-600">{description}</p>
+            <p className="text-sm px-1 text-gray-600 line-clamp-2">{description}</p>
           )}
         </div>
         {actionArrow && (

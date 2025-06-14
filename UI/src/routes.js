@@ -3,7 +3,7 @@ import Shop from "./Shop";
 import ShopApplicationWrapper from "./pages/ShopApplicationWrapper";
 import ProductListPage from "./pages/ProductListPage/ProductListPage";
 import ProductDetails from "./pages/ProductDetailPage/ProductDetails";
-import { loadProductBySlug } from "./routes/products";
+import { loadProductBySlug} from "./routes/loader";
 import AuthenticationWrapper from "./pages/AuthenticationWrapper";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";

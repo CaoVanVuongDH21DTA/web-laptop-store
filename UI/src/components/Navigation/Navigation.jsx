@@ -87,16 +87,16 @@ const Navigation = ({ variant = "default" }) => {
         <div className={`${showMobileMenu ? "block" : "hidden"} w-full md:flex md:w-auto md:flex-wrap items-center gap-10`}>
           <ul className="flex flex-col md:flex-row gap-4 md:gap-14 text-gray-600 hover:text-black">
             <li>
-              <NavLink to="/" className={({ isActive }) => (isActive ? "active-link" : "")}>Trang Chủ</NavLink>
+              <NavLink to="/" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => setShowMobileMenu(false)}>Trang Chủ</NavLink>
             </li>
             <li>
-              <NavLink to="/laptop" className={({ isActive }) => (isActive ? "active-link" : "")}>Laptop</NavLink>
+              <NavLink to="/laptop" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => setShowMobileMenu(false)}>Laptop</NavLink>
             </li>
             <li>
-              <NavLink to="/linh-kien" className={({ isActive }) => (isActive ? "active-link" : "")}>Linh Kiện Laptop</NavLink>
+              <NavLink to="/linh-kien" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => setShowMobileMenu(false)}>Linh Kiện Laptop</NavLink>
             </li>
             <li>
-              <NavLink to="/phu-kien" className={({ isActive }) => (isActive ? "active-link" : "")}>Phụ Kiện Laptop</NavLink>
+              <NavLink to="/phu-kien" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => setShowMobileMenu(false)}>Phụ Kiện Laptop</NavLink>
             </li>
           </ul>
 

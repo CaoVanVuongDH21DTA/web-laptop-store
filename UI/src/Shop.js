@@ -32,9 +32,7 @@ const Shop = () => {
   return (
     <>
       <HeroSection />
-      {/* ✅ Hiển thị categories từ Redux */}
       {categories?.map((item) => {
-        // Ưu tiên categoryTypes, nếu không có thì dùng categoryBrands
         const types =
           item.categoryTypes && item.categoryTypes.length > 0
             ? item.categoryTypes.map((type) => ({
@@ -51,11 +49,9 @@ const Shop = () => {
                 img_category: brand.imgCategory,
                 code: brand.code,
                 itemType: 'brand',
-                parentName: 'Laptop', // Mặc định là Laptop nếu là brand
+                parentName: 'Laptop',
               }));
 
-
-        // Bỏ qua nếu không có types (cả categoryTypes và categoryBrands đều trống)
         if (!types || types.length === 0) return null;
 
         return (

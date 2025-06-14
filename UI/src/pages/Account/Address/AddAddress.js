@@ -5,6 +5,7 @@ import { addAddressAPI } from "../../../api/userInfo";
 import { saveAddress } from "../../../store/features/user";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
+// import { LoaderPage } from "../../../routes/loader";
 
 const backdrop = {
   visible: { opacity: 1 },
@@ -17,6 +18,7 @@ const modal = {
 };
 
 const AddAddress = ({ onCancel }) => {
+  // const [localLoading, setLocalLoading] = useState(false);
   const [values, setValues] = useState({
     name: "",
     phoneNumber: "",
@@ -31,6 +33,7 @@ const AddAddress = ({ onCancel }) => {
 
   const onSubmit = useCallback(
     (evt) => {
+      // setLocalLoading(true);
       evt.preventDefault();
       dispatch(setLoading(true));
       setError("");
@@ -46,6 +49,7 @@ const AddAddress = ({ onCancel }) => {
         })
         .finally(() => {
           dispatch(setLoading(false));
+          // setLocalLoading(false)
         });
     },
     [dispatch, onCancel, values]
@@ -71,6 +75,7 @@ const AddAddress = ({ onCancel }) => {
         animate="visible"
         exit="hidden"
       >
+        {/* {localLoading && <LoaderPage/>} */}
         <motion.div
           className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
           variants={modal}

@@ -78,158 +78,120 @@ const Cart = () => {
         {cartItems?.length > 0 && (
           <>
             <p className="text-xl text-black p-4">Shopping Bag</p>
-            <table className="w-full text-lg">
-              <thead className="text-sm bg-black text-white uppercase">
-                <tr>
-                  {headers?.map((header) => {
-                    return (
-                      <th scope="col" className="px-6 py-3">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-black text-white">
+                  <tr>
+                    {headers?.map((header) => (
+                      <th key={header} className="px-4 py-2 text-left whitespace-nowrap">
                         {header}
                       </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {cartItems?.map((item, index) => {
-                  return (
-                    <tr className="p-4 bg-white border-b">
-                      <td>
-                        <div className="flex p-4">
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {cartItems?.map((item, index) => (
+                    <tr key={index} className="bg-white border-b">
+                      <td className="px-4 py-4">
+                        <div className="flex gap-4 items-center">
                           <img
                             src={item?.thumbnail}
-                            alt={"product-" + index}
-                            className="w-[120px] h-[120px] object-cover"
+                            alt={`product-${index}`}
+                            className="w-20 h-20 object-cover"
                           />
-                          <div className="flex flex-col text-sm px-2 text-gray-600">
+                          <div className="text-gray-600">
                             <p>{item?.name || "Name"}</p>
-                            <p>Color {item?.variant?.color}</p>
+                            <p className="text-sm">Color {item?.variant?.color}</p>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <p className="text-center text-sm text-gray-600">
-                          {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.price)}
-                        </p>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.price)}
                       </td>
-
-                      <td>
+                      <td className="px-4 py-4">
                         <NumberInput
                           max={item?.stock}
                           quantity={item?.quantity}
                           onChangeQuantity={(value) =>
-                            onChangeQuantity(
-                              value,
-                              item?.productId,
-                              item?.variant?.id
-                            )
+                            onChangeQuantity(value, item?.productId, item?.variant?.id)
                           }
                         />
                       </td>
-
-                      <td>
-                        <p className="text-center text-sm text-gray-600">
-                          FREE
-                        </p>
+                      <td className="px-4 py-4">FREE</td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.subTotal)}
                       </td>
-
-                      <td>
-                        <p className="text-center text-sm text-gray-600">
-                          {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(item?.subTotal)}
-                        </p>
-                      </td>
-
-                      <td>
+                      <td className="px-4 py-4 text-center">
                         <button
-                          className="flex justify-center items-center w-full"
-                          onClick={() =>
-                            onDeleteProduct(item?.productId, item?.variant?.id)
-                          }
+                          onClick={() => onDeleteProduct(item?.productId, item?.variant?.id)}
+                          className="text-red-600 hover:text-red-800"
                         >
                           <DeleteIcon />
                         </button>
                       </td>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div className="flex justify-between bg-gray-200 p-8">
-              <div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex flex-col lg:flex-row justify-between bg-gray-200 p-4 gap-8 mt-6">
+              <div className="flex-1">
                 <p className="text-lg font-bold">Discount Coupon</p>
                 <p className="text-sm text-gray-600">Enter your coupon code</p>
-                <form>
+                <form className="flex gap-2 mt-2">
                   <input
                     type="text"
-                    className="w-[150px] h-[48px] mt-2 border-gray-500 p-2 hover:outline-none"
+                    className="flex-1 border border-gray-500 p-2 rounded"
                     placeholder="Enter code"
                   />
-                  <button className="w-[80px] h-[48px] bg-black text-white">
-                    Apply
-                  </button>
+                  <button className="px-4 bg-black text-white rounded">Apply</button>
                 </form>
               </div>
-              <div className="mr-20 pr-8">
-                <div className="flex gap-8 text-lg">
-                  <p className="w-[120px]">SubTotal</p> <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
+              <div className="flex-1 lg:max-w-md">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-lg">
+                    <p>SubTotal</p>
+                    <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
+                  </div>
+                  <div className="flex justify-between text-lg">
+                    <p>Shipping</p>
+                    <p>Free Ship</p>
+                  </div>
+                  <div className="flex justify-between text-lg font-bold">
+                    <p>Grand Total</p>
+                    <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
+                  </div>
                 </div>
-                <div className="flex gap-8 text-lg mt-2">
-                  <p className="w-[120px]">Shipping</p> 
-                    <p>
-                      {/* {subTotal > 0
-                      ? new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND"
-                        }).format(subTotal)
-                      : "Miễn phí"} */}
-
-                      Free Ship
-                  </p>
-                </div>
-                <div className="flex gap-8 text-lg mt-2 font-bold">
-                  <p className="w-[120px]">Grand Total</p> <p>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(subTotal)}</p>
-                </div>
-                <hr className="h-[2px] bg-slate-400 mt-2"></hr>
-                {isLoggedIn && (
+                <hr className="my-2" />
+                {isLoggedIn ? (
                   <button
-                    className="w-full items-center h-[48px] bg-black border rounded-lg mt-2 text-white hover:bg-gray-800"
+                    className="w-full h-12 bg-black text-white rounded hover:bg-gray-800"
                     onClick={() => navigate("/checkout")}
                   >
                     Checkout
                   </button>
-                )}
-                {!isLoggedIn && (
-                  <div className="p-4">
-                    <Link
-                      to={"/v1/login"}
-                      className="w-full p-2 items-center h-[48px] bg-black border rounded-lg mt-2 text-white hover:bg-gray-800"
-                    >
-                      Login to Checkout
-                    </Link>
-                  </div>
+                ) : (
+                  <Link
+                    to="/v1/login"
+                    className="block text-center w-full h-12 bg-black text-white rounded hover:bg-gray-800 pt-3"
+                  >
+                    Login to Checkout
+                  </Link>
                 )}
               </div>
             </div>
           </>
         )}
         {!cartItems?.length && (
-          <div className="w-full items-center text-center">
-            <div className="flex justify-center">
-              <img
-                src={EmptyCart}
-                className="w-[240px] h-[240px "
-                alt="empty-cart"
-              />
-            </div>
-            <p className="text-3xl font-bold">Your cart is empty</p>
-            <div className="p-4">
-              <Link
-                to={"/"}
-                className="w-full p-2 items-center h-[48px] bg-black border rounded-lg mt-2 text-white hover:bg-gray-800"
-              >
-                Continue Shopping
-              </Link>
-            </div>
+          <div className="w-full flex flex-col items-center text-center mt-10">
+            <img src={EmptyCart} className="w-48 h-48" alt="empty-cart" />
+            <p className="text-2xl font-bold mt-4">Your cart is empty</p>
+            <Link
+              to="/"
+              className="mt-4 px-6 py-3 bg-black text-white rounded hover:bg-gray-800"
+            >
+              Continue Shopping
+            </Link>
           </div>
         )}
       </div>
@@ -239,13 +201,13 @@ const Cart = () => {
         style={customStyles}
         contentLabel="Remove Item"
       >
-        <p>Are you sure you want to remve this item ?</p>
+        <p>Are you sure you want to remove this item?</p>
         <div className="flex justify-between p-4">
-          <button className="h-[48px]" onClick={onCloseModal}>
+          <button className="h-12 px-4 border rounded" onClick={onCloseModal}>
             Cancel
           </button>
           <button
-            className="bg-black text-white w-[80px] h-[48px] border rounded-lg"
+            className="h-12 px-4 bg-black text-white rounded"
             onClick={onDeleteItem}
           >
             Remove
@@ -257,3 +219,4 @@ const Cart = () => {
 };
 
 export default Cart;
+
