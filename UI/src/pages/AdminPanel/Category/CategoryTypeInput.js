@@ -1,22 +1,44 @@
-import React, { useMemo } from 'react'
-import { required, SelectInput, useGetList } from 'react-admin'
-import { useWatch } from 'react-hook-form'
+import { SelectInput} from 'react-admin';
+import { useWatch } from 'react-hook-form';
+import { useCategoryType } from '../../../hook/useCategoryType';
 
-const CategoryTypeInput = ({}) => {
+const CategoryTypeInput = () => {
+  const categoryId = useWatch({ name: 'categoryId' });
+  const categoryTypeId = useWatch({ name: 'categoryTypeId' });
 
-  const categoryId = useWatch({name:'categoryId'});
-  const {data} = useGetList("category");
-
-  const categoryTypes = useMemo(()=>{
-    return data?.find((category)=> category?.id === categoryId)?.categoryTypes;
-  },[data,categoryId]);
-
+  const {
+    categories,
+    categoryTypes,
+    isLoading,
+  } = useCategoryType(categoryId, categoryTypeId);
 
   return (
-    <div>
-        <SelectInput source="categoryTypeId" choices={categoryTypes} validate={[required()]}/>
-    </div>
-  )
-}
+    <>
+      {/* B1: Chọn Category */}
+      <SelectInput
+        source="categoryId"
+        label="Danh mục"
+        choices={categories}
+        optionText="name"
+        optionValue="id"
+        emptyText={false}
+        disabled={isLoading}
+      />
 
-export default CategoryTypeInput
+      {/* B2: Chọn CategoryType nếu đã chọn Category */}
+      {categoryId && categoryTypes.length > 0 && (
+        <SelectInput
+          source="categoryTypeId"
+          label="Loại sản phẩm"
+          choices={categoryTypes}
+          optionText="name"
+          optionValue="id"
+          disabled={isLoading}
+          emptyText={false}
+        />
+      )}
+    </>
+  );
+};
+
+export default CategoryTypeInput;

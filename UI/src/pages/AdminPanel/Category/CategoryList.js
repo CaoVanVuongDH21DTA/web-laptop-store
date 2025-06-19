@@ -1,5 +1,4 @@
-import React from "react";
-import { ArrayField, Datagrid, List, TextField } from "react-admin";
+import { Datagrid, List, TextField } from "react-admin";
 
 const CategoryList = () => {
   return (
@@ -9,14 +8,6 @@ const CategoryList = () => {
         <TextField source="name" />
         <TextField source="code" />
         <TextField source="description" />
-        <ArrayField source="categoryType">
-            
-          <TextField disabled source="id" />
-          <TextField source="name" />
-          <TextField source="code" />
-          <TextField source="description" />
-          
-        </ArrayField>
       </Datagrid>
     </List>
   );

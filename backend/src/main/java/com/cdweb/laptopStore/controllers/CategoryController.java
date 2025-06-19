@@ -3,6 +3,7 @@ package com.cdweb.laptopStore.controllers;
 import com.cdweb.laptopStore.dto.CategoryDto;
 import com.cdweb.laptopStore.dto.CategoryFiltersDto;
 import com.cdweb.laptopStore.entities.Category;
+import com.cdweb.laptopStore.mapper.CategoryMapper;
 import com.cdweb.laptopStore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
@@ -39,9 +43,11 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable(value = "id",required = true) UUID categoryId){
-        Category updatedCategory = categoryService.updateCategory(categoryDto,categoryId);
-        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+    public ResponseEntity<CategoryDto> updateCategory(
+            @PathVariable UUID id,
+            @RequestBody CategoryDto categoryDto) {
+        Category updated = categoryService.updateCategory(id, categoryDto);
+        return ResponseEntity.ok(categoryMapper.mapToDto(updated));
     }
 
     @DeleteMapping("/{id}")

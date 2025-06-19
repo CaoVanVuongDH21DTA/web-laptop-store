@@ -5,6 +5,7 @@ import com.cdweb.laptopStore.dto.ProductResourceDto;
 import com.cdweb.laptopStore.dto.ProductSpecificationDto;
 import com.cdweb.laptopStore.dto.ProductVariantDto;
 import com.cdweb.laptopStore.entities.*;
+import com.cdweb.laptopStore.repositories.CategoryBrandRepository;
 import com.cdweb.laptopStore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,56 +19,63 @@ public class ProductMapper {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CategoryBrandRepository categoryBrandRepository;
+
     public Product mapToProductEntity(ProductDto productDto) {
         Product product = new Product();
-        Category category = categoryService.getCategory(productDto.getCategoryId());
         if (productDto.getId() != null) {
             product.setId(productDto.getId());
         }
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
-
-        if (category != null) {
-            product.setCategory(category);
-            UUID categoryBrandId = productDto.getCategoryBrandId();
-
-            CategoryBrand categoryBrand = category.getCategoryBrands().stream()
-                    .filter(ct -> ct.getId().equals(categoryBrandId))
-                    .findFirst()
-                    .orElse(null);
-            product.setCategoryBrand(categoryBrand);
-        } else {
-            System.out.println("CategoryBrand not found");
-        }
-
-        product.setNewArrival(productDto.isNewArrival());
         product.setPrice(productDto.getPrice());
-        product.setRating(productDto.getRating());
         product.setSlug(productDto.getSlug());
+        product.setEnabled(productDto.isEnabled()); 
+        product.setNewArrival(productDto.isNewArrival());
+        product.setRating(productDto.getRating());
 
-        if (category != null) {
-            product.setCategory(category);
-            UUID categoryTypeId = productDto.getCategoryTypeId();
+        // Validate and set Category
+        UUID categoryId = productDto.getCategoryId();
+        if (categoryId == null) {
+            throw new IllegalArgumentException("categoryId is required");
+        }
+        Category category = categoryService.getCategory(categoryId);
+        if (category == null) {
+            throw new IllegalArgumentException("Category not found: " + categoryId);
+        }
+        product.setCategory(category);
 
+        // Validate and set CategoryBrand
+        UUID categoryBrandId = productDto.getCategoryBrandId() != null ? productDto.getCategoryBrandId() : null;
+        if (categoryBrandId == null) {
+            throw new IllegalArgumentException("categoryBrandId is required");
+        }
+        CategoryBrand categoryBrand = categoryBrandRepository.findById(categoryBrandId)
+                .orElseThrow(() -> new IllegalArgumentException("CategoryBrand not found: " + categoryBrandId));
+        product.setCategoryBrand(categoryBrand);
+
+        // Set CategoryType (optional)
+        UUID categoryTypeId = productDto.getCategoryTypeId();
+        if (categoryTypeId != null) {
             CategoryType categoryType = category.getCategoryTypes().stream()
                     .filter(ct -> ct.getId().equals(categoryTypeId))
                     .findFirst()
-                    .orElse(null);
+                    .orElseThrow(() -> new IllegalArgumentException("CategoryType not found: " + categoryTypeId));
             product.setCategoryType(categoryType);
-        } else {
-            System.out.println("CategoryType not found");
         }
 
+        // Map variants and resources
         if (productDto.getVariants() != null) {
             product.setProductVariants(mapToProductVariant(productDto.getVariants(), product));
         }
-
         if (productDto.getProductResources() != null) {
             product.setResources(mapToProductResources(productDto.getProductResources(), product));
         }
 
         return product;
     }
+
     private List<Resources> mapToProductResources(List<ProductResourceDto> productResources, Product product) {
 
         return productResources.stream().map(productResourceDto -> {
@@ -154,6 +162,7 @@ public class ProductMapper {
                 .variants(mapProductVariantListToDto(product.getProductVariants()))
                 .productResources(mapProductResourcesListDto(product.getResources()))
                 .specifications(mapToProductSpecifications(product.getProductSpecifications()))
+                .enabled(product.isEnabled())
                 .build();
     }
 

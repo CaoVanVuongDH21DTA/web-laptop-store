@@ -29,6 +29,7 @@ public class ProductController {
             @RequestParam(required = false) UUID typeId,
             @RequestParam(required = false) String slug,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean enabled,
             HttpServletResponse response
     ) {
         List<ProductDto> productList = new ArrayList<>();
@@ -36,10 +37,10 @@ public class ProductController {
         if (StringUtils.isNotBlank(slug)) {
             ProductDto productDto = productService.getProductBySlug(slug);
             if (productDto != null) productList.add(productDto);
-        }else if (StringUtils.isNotBlank(search)) {
+        } else if (StringUtils.isNotBlank(search)) {
             productList = productService.searchProductsByName(search);
         } else {
-            productList = productService.getAllProducts(categoryId, typeId);
+            productList = productService.getAllProducts(categoryId, typeId, enabled);
         }
 
         response.setHeader("Content-Range", String.valueOf(productList.size()));
@@ -56,7 +57,13 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto){
         Product product = productService.addProduct(productDto);
-        return new ResponseEntity<>(product,HttpStatus.CREATED);
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

@@ -31,4 +31,5 @@ public class ProductDto {
     private List<ProductVariantDto> variants;
     private List<ProductResourceDto> productResources;
     private List<ProductSpecificationDto> specifications;
+    private boolean enabled;
 }

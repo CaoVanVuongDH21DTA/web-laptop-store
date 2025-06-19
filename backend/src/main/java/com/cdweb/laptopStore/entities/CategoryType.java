@@ -41,5 +41,4 @@ public class CategoryType {
     
     @OneToMany(mappedBy = "categoryType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
-
 }

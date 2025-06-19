@@ -90,5 +90,6 @@ public class Product {
     public List<ProductSpecification> getProductSpecifications() {
         return productSpecifications;
     }
-
+    @Column(nullable = false)
+    private boolean enabled = true;
 }

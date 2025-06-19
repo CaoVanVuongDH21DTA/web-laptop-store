@@ -126,29 +126,28 @@ public class OrderService {
         List<Order> orders = orderRepository.findByUser(user);
         return orders.stream().map(order -> {
             return OrderDetails.builder()
-                    .id(order.getId())
-                    .orderDate(order.getOrderDate())
-                    .orderStatus(order.getOrderStatus())
-                    .address(order.getAddress())
-                    .totalAmount(order.getTotalAmount())
-                    .orderItemList(getItemDetails(order.getOrderItemList()))
-                    .expectedDeliveryDate(order.getExpectedDeliveryDate())
-                    .build();
+                .id(order.getId())
+                .orderDate(order.getOrderDate())
+                .orderStatus(order.getOrderStatus())
+                .address(order.getAddress())
+                .totalAmount(order.getTotalAmount())
+                .orderItemList(getItemDetails(order.getOrderItemList()))
+                .expectedDeliveryDate(order.getExpectedDeliveryDate())
+                .user(order.getUser())
+                .build();
         }).toList();
     }
 
-    private List<OrderItemDetail> getItemDetails(List<OrderItem> orderItemList) {
+    public List<OrderItemDetail> getItemDetails(List<OrderItem> orderItemList) {
         return orderItemList.stream().map(orderItem -> {
             return OrderItemDetail.builder()
-                    .id(orderItem.getId())
-                    .itemPrice(orderItem.getItemPrice())
-                    .product(orderItem.getProduct())
-                    .productVariantId(orderItem.getProductVariantId())
-                    .quantity(orderItem.getQuantity())
-                    .build();
+                .id(orderItem.getId())
+                .product(orderItem.getProduct())
+                .quantity(orderItem.getQuantity())
+                .build();
         }).toList();
     }
-
+    
     public void cancelOrder(UUID id, Principal principal) {
         User user = (User) userDetailsService.loadUserByUsername(principal.getName());
         Order order = orderRepository.findById(id).get();
@@ -160,6 +159,46 @@ public class OrderService {
         else{
             new RuntimeException("Invalid request");
         }
-
     }
+
+    @Transactional
+    public Order updateOrder(UUID id, OrderRequest orderRequest, Principal principal) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // Cập nhật các trường cho phép
+        if (orderRequest.getOrderStatus() != null) {
+            order.setOrderStatus(orderRequest.getOrderStatus());
+        }
+
+        if (orderRequest.getExpectedDeliveryDate() != null) {
+            order.setExpectedDeliveryDate(orderRequest.getExpectedDeliveryDate());
+        }
+
+        // Có thể cập nhật thêm nếu cần
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public void deleteOrder(UUID orderId, Principal principal) {
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+        // Kiểm tra quyền sở hữu (chỉ chủ đơn hàng hoặc admin mới được xóa)
+        boolean isAdmin = user.getAuthorities().stream()
+            .anyMatch(auth -> auth.getAuthority().equalsIgnoreCase("ADMIN"));
+
+        if (!order.getUser().getId().equals(user.getId()) && !isAdmin) {
+            throw new RuntimeException("Bạn không có quyền xóa đơn hàng này");
+        }
+
+        // Chỉ được xóa nếu đơn hàng chưa xử lý
+        if (order.getOrderStatus() != OrderStatus.PENDING) {
+            throw new RuntimeException("Chỉ có thể xóa đơn hàng đang chờ xử lý");
+        }
+
+        orderRepository.delete(order);
+    }
+
 }

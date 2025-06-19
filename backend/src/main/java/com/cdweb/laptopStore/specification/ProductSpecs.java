@@ -59,4 +59,21 @@ public class ProductSpecs {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Product> isEnabled() {
+        return (root, query, builder) -> builder.isTrue(root.get("enabled"));
+    }
+
+    public static Specification<Product> isNotEnabled() {
+        return (root, query, builder) -> builder.isFalse(root.get("enabled"));
+    }
+
+    public static Specification<Product> nameContains(String keyword) {
+        return (root, query, builder) ->
+            builder.like(builder.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
+    }
+
+    public static Specification<Product> hasSlug(String slug) {
+        return (root, query, builder) -> builder.equal(root.get("slug"), slug);
+    }
 }

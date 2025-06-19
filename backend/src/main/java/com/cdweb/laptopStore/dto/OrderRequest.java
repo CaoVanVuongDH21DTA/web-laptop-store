@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.cdweb.laptopStore.entities.OrderStatus;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +25,5 @@ public class OrderRequest {
     private Double discount;
     private String paymentMethod;
     private LocalDateTime expectedDeliveryDate;
+    private OrderStatus orderStatus;
 }

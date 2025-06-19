@@ -1,5 +1,6 @@
 package com.cdweb.laptopStore.dto;
 
+import com.cdweb.laptopStore.auth.entities.User;
 import com.cdweb.laptopStore.entities.Address;
 import com.cdweb.laptopStore.entities.OrderStatus;
 import lombok.AllArgsConstructor;
@@ -16,14 +17,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class OrderDetails {
-
     private UUID id;
     private LocalDateTime orderDate;
     private Address address;
     private Double totalAmount;
     private OrderStatus orderStatus;
-    private String shipmentNumber;
     private LocalDateTime expectedDeliveryDate;
     private List<OrderItemDetail> orderItemList;
-
+    private User user;
 }

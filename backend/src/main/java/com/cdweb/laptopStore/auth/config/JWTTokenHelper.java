@@ -26,19 +26,19 @@ public class JWTTokenHelper {
 
     public String generateToken(String userName){
         return Jwts.builder()
-                .issuer(appName)
-                .subject(userName)
-                .issuedAt(new Date())
-                .expiration(generateExpirationDate())
-                .signWith(getSigningKey())
-                .compact();
+            .issuer(appName)
+            .subject(userName)
+            .issuedAt(new Date())
+            .expiration(generateExpirationDate())
+            .signWith(getSigningKey())
+            .compact();
     }
 
     private Key getSigningKey() {
         byte[] keysBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keysBytes);
     }
-
+    // thời gian sống của token
     private Date generateExpirationDate() {
         return new Date(new Date().getTime() + expiresIn * 1000L);
     }

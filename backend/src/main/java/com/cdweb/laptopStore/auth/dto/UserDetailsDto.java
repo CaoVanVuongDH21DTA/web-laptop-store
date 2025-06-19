@@ -23,4 +23,5 @@ public class UserDetailsDto {
     private String email;
     private Object authorityList;
     private List<Address> addressList;
+    private Boolean enabled;
 }

@@ -1,65 +1,85 @@
-import React from 'react'
-import { Admin, fetchUtils, Resource,withLifecycleCallbacks } from 'react-admin'
-import simpleRestProvider from "ra-data-simple-rest";
-import ProductList from './ProductList';
-import EditProduct from './EditProduct';
-import CreateProduct from './CreateProduct';
-import CategoryList from './Category/CategoryList';
-import CategoryEdit from './Category/CategoryEdit';
-import { fileUploadAPI } from '../../api/fileUpload';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Admin, Resource, Loading} from 'react-admin';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { Toaster } from 'react-hot-toast';
+import Dashboard from './Dashboard'; 
+import Layout from './Layout';
+import dataProvider from './data/dataProvider';
+import ProductList from './Product/ProductList';
+import EditProduct from './Product/EditProduct';
+import CreateProduct from './Product/CreateProduct'
+import CategoryList from './Category/CategoryList'
+import CategoryEdit from './Category/CategoryEdit'
+import OrderList from './Order/OrderList'
+import OrderEdit from './Order/OrderEdit'
+import UserList from './User/UserList'
+import UserEdit from './User/UserEdit'
+import ProductIcon from '@mui/icons-material/ShoppingCart';
+import CategoryIcon from '@mui/icons-material/Category';
+import OrderIcon from '@mui/icons-material/Receipt';
+import UserIcon from '@mui/icons-material/People';
 
-const CDN_URL = '';
+const theme = createTheme({
+  palette: {
+    primary: { main: '#1976d2' },
+    secondary: { main: '#f50057' },
+    background: { default: '#f4f6f8' },
+  },
+  typography: { fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: { borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' },
+      },
+    },
+  },
+});
 
-const httpClient = (url,options={})=>{
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
+});
 
-  const token = localStorage.getItem('authToken');
-  if(!options.headers) options.headers = new Headers();
-  options.headers.set('Authorization',`Bearer ${token}`);
-  return fetchUtils.fetchJson(url,options);
-}
+const AdminPanel = () => (
+  <>
+    <Toaster position="top-right" />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Admin
+          dataProvider={dataProvider}
+          basename="/admin"
+          dashboard={Dashboard}
+          loading={Loading}
+          layout={Layout}
+        >
+          <Resource
+            name="products"
+            list={ProductList}
+            edit={EditProduct}
+            create={CreateProduct}
+            icon={ProductIcon}
+          />
+          <Resource
+            name="category"
+            list={CategoryList}
+            edit={CategoryEdit}
+            icon={CategoryIcon}
+          />
+          <Resource
+            name="order"
+            list={OrderList}
+            edit={OrderEdit}
+            icon={OrderIcon}
+          />
+          <Resource
+            name="user"
+            list={UserList}
+            edit={UserEdit}
+            icon={UserIcon}
+          />
+        </Admin>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </>
+);
 
-const dataProvider = withLifecycleCallbacks(simpleRestProvider('http://localhost:8080/api',httpClient),[
-  {
-    resource:"products",
-    beforeSave: async (params,dataProvider) =>{
-      let requestBody = {
-        ...params
-      }
-      let productResList = params?.productResources ?? [];
-      const fileName = params?.thumbnail?.rawFile?.name?.replaceAll(' ','-');
-      const formData = new FormData();
-      formData.append("file",params?.thumbnail?.rawFile);
-      formData.append("fileName",fileName);
-
-      const thumbnailResponse = await fileUploadAPI(formData);
-      requestBody.thumbnail = CDN_URL+"/"+fileName;
-
-    
-      const newProductResList = await Promise.all(productResList?.map(async (productResource)=>{
-        const fileName = productResource?.url?.rawFile?.name?.replaceAll(' ','-');
-        const formData = new FormData();
-        formData.append("file",productResource?.url?.rawFile);
-        formData.append("fileName",fileName);
-        const fileUploadRes = await fileUploadAPI(formData);
-        return {
-          ...productResource,
-          url:CDN_URL+"/"+fileName,
-        };
-      }));
-      const request = {
-        ...requestBody,
-        productResources:newProductResList
-      }
-      return request;
-    }
-  }
-]);
-
-export const AdminPanel = () => {
-  return (
-    <Admin dataProvider={dataProvider} basename='/admin'>
-      <Resource name='products' list={ProductList} edit={EditProduct} create={CreateProduct}/>
-      <Resource name='category' list={CategoryList} edit={CategoryEdit}/>
-    </Admin>
-  )
-}
+export default AdminPanel;
